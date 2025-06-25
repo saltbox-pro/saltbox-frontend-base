@@ -12,7 +12,7 @@ module.exports = (webpackConfigEnv, argv) => {
 
   return merge(defaultConfig, {
     devServer: {
-      port: 8001,
+      port: 4001,
     },
     module: {
       rules: [
