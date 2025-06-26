@@ -10,7 +10,9 @@ import { useEffect, useRef } from "react";
 
 const { Header, Sider, Content } = Layout;
 
+import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
+import { AuthStore } from "saltbox-root-config/store";
 
 export const generateMenuItems = (config: any): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
@@ -48,17 +50,16 @@ export const generateMenuItems = (config: any): MenuProps["items"] => {
   return items;
 };
 
-interface LayoutComponentProps {
-  authStore: any;
+interface AppLayoutProps {
+  authStore: AuthStore;
   menuConfig: any;
 }
 
-const LayoutComponent = observer(
-  ({ authStore, menuConfig }: LayoutComponentProps) => {
+export const AppLayout = observer(
+  ({ authStore, menuConfig }: AppLayoutProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      // Уведомляем о готовности контейнера при mount
       if (containerRef.current) {
         const event = new CustomEvent("app-container-ready", {
           detail: {
@@ -70,7 +71,6 @@ const LayoutComponent = observer(
         window.dispatchEvent(event);
       }
 
-      // Cleanup функция для уведомления об unmount
       return () => {
         const event = new CustomEvent("app-container-ready", {
           detail: {
@@ -180,5 +180,3 @@ const LayoutComponent = observer(
     );
   }
 );
-
-export default LayoutComponent;

@@ -2,8 +2,7 @@ import { Result, Spin, Button, Flex } from "antd";
 import { BrowserRouter, useNavigate, useLocation } from "react-router";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
-
-import LayoutComponent from "./layout.component";
+import { AppLayout } from "./app-layout";
 
 const AuthWrapper = observer(({ authStore, children }) => {
   const navigate = useNavigate();
@@ -66,7 +65,7 @@ export default observer(function Root(props) {
   return (
     <BrowserRouter>
       <AuthWrapper authStore={authStore}>
-        <LayoutComponent authStore={authStore} menuConfig={menuConfig} />
+        <AppLayout authStore={authStore} menuConfig={menuConfig} />
       </AuthWrapper>
     </BrowserRouter>
   );

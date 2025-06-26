@@ -1,10 +1,6 @@
 {
-  "extends": "ts-config-single-spa",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "declarationDir": "dist"
-  },
-  "files": ["src/saltbox-base.tsx"],
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.test*"]
+  "extends": "../../tsconfig.json",
+  "include": [
+    "src/**/*"
+  ],
 }
