@@ -11,7 +11,7 @@ module.exports = (webpackConfigEnv, argv) => {
     outputSystemJS: false,
   });
 
-  return merge(defaultConfig, {
+  const config = merge(defaultConfig, {
     devServer: {
       port: 4201,
     },
@@ -53,4 +53,8 @@ module.exports = (webpackConfigEnv, argv) => {
       ],
     },
   });
+
+  config.externals = [];
+
+  return config;
 };
