@@ -60,12 +60,12 @@ const AuthWrapper = observer(({ authStore, children }) => {
 });
 
 export default observer(function Root(props) {
-  const { authStore, menuConfig } = props;
+  const { authStore, menuStore } = props;
 
   return (
     <BrowserRouter>
       <AuthWrapper authStore={authStore}>
-        <AppLayout authStore={authStore} menuConfig={menuConfig} />
+        <AppLayout authStore={authStore} menuStore={menuStore} />
       </AuthWrapper>
     </BrowserRouter>
   );

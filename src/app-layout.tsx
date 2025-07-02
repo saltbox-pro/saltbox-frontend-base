@@ -13,8 +13,9 @@ const { Header, Sider, Content } = Layout;
 import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
 import { AuthStore } from "saltbox-root-config/store";
+import { MenuItem, MenuStore } from "saltbox-root-config/store/menu-store";
 
-export const generateMenuItems = (config: any): MenuProps["items"] => {
+export const generateMenuItems = (config: MenuItem[]): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
 
   config.forEach((item) => {
@@ -52,11 +53,11 @@ export const generateMenuItems = (config: any): MenuProps["items"] => {
 
 interface AppLayoutProps {
   authStore: AuthStore;
-  menuConfig: any;
+  menuStore: MenuStore;
 }
 
 export const AppLayout = observer(
-  ({ authStore, menuConfig }: AppLayoutProps) => {
+  ({ authStore, menuStore }: AppLayoutProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -144,7 +145,7 @@ export const AppLayout = observer(
                 defaultSelectedKeys={["1"]}
                 defaultOpenKeys={["sub1"]}
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateMenuItems(menuConfig)}
+                items={generateMenuItems(menuStore.menu)}
               />
               <div style={{ padding: 16 }}>
                 <Button
