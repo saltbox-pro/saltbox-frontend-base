@@ -1,5 +1,14 @@
-import { Layout, Menu, MenuProps, Dropdown, Button, Descriptions, Flex, Popover } from "antd";
-import { href, Link } from "react-router";
+import {
+  Layout,
+  Menu,
+  MenuProps,
+  Dropdown,
+  Button,
+  Descriptions,
+  Flex,
+  Popover,
+} from "antd";
+import { Link } from "react-router";
 import {
   UserOutlined,
   LogoutOutlined,
@@ -8,17 +17,14 @@ import {
 import { observer } from "mobx-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { i18nStore } from "saltbox-core/store/i18n-store";
 
 const { Header, Sider, Content } = Layout;
 
 import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
-import { AuthStore } from "saltbox-root-config/store";
-import { MenuItem, MenuStore } from "saltbox-root-config/store/menu-store";
-import { MatIcon } from "saltbox-core/shared/components/mat-icon/mat-icon";
+import { MatIcon } from "./mat-icon";
 
-export const generateMenuItems = (config: MenuItem[]): MenuProps["items"] => {
+export const generateMenuItems = (config: any[]): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
 
   config.forEach((item) => {
@@ -55,8 +61,8 @@ export const generateMenuItems = (config: MenuItem[]): MenuProps["items"] => {
 };
 
 interface AppLayoutProps {
-  authStore: AuthStore;
-  menuStore: MenuStore;
+  authStore: any;
+  menuStore: any;
 }
 
 export const AppLayout = observer(
@@ -116,7 +122,10 @@ export const AppLayout = observer(
             <Popover
               content={
                 <>
-                  <Descriptions column={1} className={styles.popoverDescription}>
+                  <Descriptions
+                    column={1}
+                    className={styles.popoverDescription}
+                  >
                     <Descriptions.Item
                       label={t("mainmenu.popover-user-info-username")}
                     >
@@ -157,32 +166,32 @@ export const AppLayout = observer(
                 {authStore.user?.profile.preferred_username}
               </Button>
             </Popover>
-
-            <Popover
-              title={t("mainmenu.popover-language-title")}
-              content={
-                <Flex vertical gap={8}>
-                  {i18nStore.supportedLanguages.map((language) => (
-                    <Button
-                      key={language}
-                      onClick={() => {
-                        i18nStore.currentLanguage = language;
-                      }}
-                    >
-                      {i18nStore.getLanguageLabel(language)}
-                    </Button>
-                  ))}
-                </Flex>
-              }
-            >
-              <Flex
-                className={styles.mainMenuUserButton}
-                align="center"
-                justify="center"
-              >
-                {i18nStore.currentLanguageLabel}
-              </Flex>
-            </Popover>
+            {/* TODO */}
+            {/*<Popover*/}
+            {/*  title={t("mainmenu.popover-language-title")}*/}
+            {/*  content={*/}
+            {/*    <Flex vertical gap={8}>*/}
+            {/*      {i18nStore.supportedLanguages.map((language) => (*/}
+            {/*        <Button*/}
+            {/*          key={language}*/}
+            {/*          onClick={() => {*/}
+            {/*            i18nStore.currentLanguage = language;*/}
+            {/*          }}*/}
+            {/*        >*/}
+            {/*          {i18nStore.getLanguageLabel(language)}*/}
+            {/*        </Button>*/}
+            {/*      ))}*/}
+            {/*    </Flex>*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <Flex*/}
+            {/*    className={styles.mainMenuUserButton}*/}
+            {/*    align="center"*/}
+            {/*    justify="center"*/}
+            {/*  >*/}
+            {/*    {i18nStore.currentLanguageLabel}*/}
+            {/*  </Flex>*/}
+            {/*</Popover>*/}
 
             <Popover
               title={t("mainmenu.popover-support-help-center")}
@@ -195,7 +204,9 @@ export const AppLayout = observer(
                     {/* {__SALTBOX_VERSION__} */}
                   </Descriptions.Item>
                   <Descriptions.Item
-                    label={t("mainmenu.popover-support-help-center-saltbox-home")}
+                    label={t(
+                      "mainmenu.popover-support-help-center-saltbox-home"
+                    )}
                   >
                     <a href="https://saltbox.pro/" target="_blank">
                       saltbox.pro
@@ -203,7 +214,7 @@ export const AppLayout = observer(
                   </Descriptions.Item>
                   <Descriptions.Item
                     label={t(
-                      "mainmenu.popover-support-help-center-saltbox-documentation",
+                      "mainmenu.popover-support-help-center-saltbox-documentation"
                     )}
                   >
                     <a href="https://saltbox.pro/docs/intro" target="_blank">
@@ -211,7 +222,9 @@ export const AppLayout = observer(
                     </a>
                   </Descriptions.Item>
                   <Descriptions.Item
-                    label={t("mainmenu.popover-support-help-center-saltbox-git")}
+                    label={t(
+                      "mainmenu.popover-support-help-center-saltbox-git"
+                    )}
                   >
                     <a href="https://dev.saltbox.pro/explore" target="_blank">
                       dev.saltbox.pro{" "}
@@ -224,7 +237,7 @@ export const AppLayout = observer(
                   </Descriptions.Item>
                   <Descriptions.Item
                     label={t(
-                      "mainmenu.popover-support-help-center-saltbox-community-in-telegram",
+                      "mainmenu.popover-support-help-center-saltbox-community-in-telegram"
                     )}
                   >
                     <a href="https://t.me/salt_box" target="_blank">
