@@ -1,6 +1,7 @@
 const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-react-ts");
 const path = require("path");
+/* const CopyPlugin = require("copy-webpack-plugin"); */
 
 module.exports = (webpackConfigEnv, argv) => {
   const defaultConfig = singleSpaDefaults({
@@ -26,31 +27,13 @@ module.exports = (webpackConfigEnv, argv) => {
       },
     },
     module: {
-      rules: [
-        {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: "asset/resource",
-        },
-        {
-          test: /\.module\.css$/,
-          use: [
-            "style-loader",
-            {
-              loader: "css-loader",
-              options: {
-                modules: {
-                  localIdentName: "[name]__[local]--[hash:base64:5]",
-                },
-              },
-            },
+      /* rules: [
+        new CopyPlugin({
+          patterns: [
+            { from: "public/locales", to: "locales" },
           ],
-        },
-        {
-          test: /\.css$/,
-          exclude: /\.module\.css$/,
-          use: ["style-loader", "css-loader"],
-        },
-      ],
+        }),
+      ], */
     },
   });
 
