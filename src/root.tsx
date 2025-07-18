@@ -9,13 +9,23 @@ const AuthWrapper = observer(({ authStore, children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (authStore && !authStore.userManager && !authStore.isLoading) {
+    if (
+      authStore &&
+      authStore.userConfig &&
+      !authStore.userManager &&
+      !authStore.isLoading
+    ) {
       authStore.initialize();
     }
   }, [authStore]);
 
   useEffect(() => {
-    if (authStore.userManager && !authStore.user && !authStore.isSignOut) {
+    if (
+      authStore.userManager &&
+      authStore.userConfig &&
+      !authStore.user &&
+      !authStore.isSignOut
+    ) {
       const urlParams = new URLSearchParams(window.location.search);
       const state = urlParams.get("state");
 
@@ -48,7 +58,11 @@ const AuthWrapper = observer(({ authStore, children }) => {
     );
   }
 
-  if (!authStore.userManager || !authStore.user || authStore.isLoading) {
+  if (
+    (!authStore.userManager && !authStore.userConfig) ||
+    !authStore.user ||
+    authStore.isLoading
+  ) {
     return (
       <Flex align="center" justify="center" style={{ height: "100vh" }}>
         <Spin size="large" />
