@@ -22,7 +22,6 @@ const { Header, Sider, Content } = Layout;
 
 import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
-import { MatIcon } from "./mat-icon";
 
 export const generateMenuItems = (config: any[]): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
@@ -63,10 +62,11 @@ export const generateMenuItems = (config: any[]): MenuProps["items"] => {
 interface AppLayoutProps {
   authStore: any;
   menuStore: any;
+  localeStore: any;
 }
 
 export const AppLayout = observer(
-  ({ authStore, menuStore }: AppLayoutProps) => {
+  ({ authStore, menuStore, localeStore }: AppLayoutProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
 
@@ -118,168 +118,53 @@ export const AppLayout = observer(
           <Link to="/">
             <img src={logo} alt="SALT.BOX" width="180px" height="34px" />
           </Link>
-          <Button.Group style={{ width: "100%" }}>
-            <Popover
-              content={
-                <>
-                  <Descriptions
-                    column={1}
-                    className={styles.popoverDescription}
+          <Popover
+            trigger="click"
+            content={
+              <div style={{ width: "400px" }}>
+                <Descriptions
+                  column={1}
+                  items={[
+                    {
+                      label: t("mainmenu.popover-user-info-username"),
+                      children: authStore.user?.profile.preferred_username,
+                    },
+                    {
+                      label: t("mainmenu.popover-user-info-email"),
+                      children: authStore.user?.profile.email,
+                    },
+                    {
+                      label: t("mainmenu.popover-user-info-first-name"),
+                      children: authStore.user?.profile.given_name,
+                    },
+                    {
+                      label: t("mainmenu.popover-user-info-last-name"),
+                      children: authStore.user?.profile.family_name,
+                    },
+                  ]}
+                />
+                <Flex justify="flex-end" gap="small">
+                  <Button
+                    color="primary"
+                    variant="text"
+                    icon={<LogoutOutlined />}
+                    onClick={handleLogout}
+                  />
+                  <Dropdown
+                    menu={{
+                      items: localeStore.supportedLocales.map((locale) => {
+                        return { key: locale, label: locale.toUpperCase() };
+                      }),
+                      onClick: ({ key }) => localeStore.setLocale(key),
+                    }}
                   >
-                    <Descriptions.Item
-                      label={t("mainmenu.popover-user-info-username")}
-                    >
-                      {authStore.user?.profile.preferred_username}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={t("mainmenu.popover-user-info-email")}
-                    >
-                      {authStore.user?.profile.email}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={t("mainmenu.popover-user-info-first-name")}
-                    >
-                      {authStore.user?.profile.given_name}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={t("mainmenu.popover-user-info-last-name")}
-                    >
-                      {authStore.user?.profile.family_name}
-                    </Descriptions.Item>
-                  </Descriptions>
-                </>
-              }
-              title={t("mainmenu.popover-user-info")}
-            >
-              <Button
-                style={{ flex: "1" }}
-                color="primary"
-                variant="text"
-                className={styles.mainMenuUserButton}
-                icon={<UserOutlined />}
-                size={"large"}
-                title={t("mainmenu.popover-user-info-title")}
-                onClick={() => {
-                  //window.location.href = `${envStore.env?.openIdAuthority}/account`;
-                }}
-              >
-                {authStore.user?.profile.preferred_username}
-              </Button>
-            </Popover>
-            {/* TODO */}
-            {/*<Popover*/}
-            {/*  title={t("mainmenu.popover-language-title")}*/}
-            {/*  content={*/}
-            {/*    <Flex vertical gap={8}>*/}
-            {/*      {i18nStore.supportedLanguages.map((language) => (*/}
-            {/*        <Button*/}
-            {/*          key={language}*/}
-            {/*          onClick={() => {*/}
-            {/*            i18nStore.currentLanguage = language;*/}
-            {/*          }}*/}
-            {/*        >*/}
-            {/*          {i18nStore.getLanguageLabel(language)}*/}
-            {/*        </Button>*/}
-            {/*      ))}*/}
-            {/*    </Flex>*/}
-            {/*  }*/}
-            {/*>*/}
-            {/*  <Flex*/}
-            {/*    className={styles.mainMenuUserButton}*/}
-            {/*    align="center"*/}
-            {/*    justify="center"*/}
-            {/*  >*/}
-            {/*    {i18nStore.currentLanguageLabel}*/}
-            {/*  </Flex>*/}
-            {/*</Popover>*/}
-
-            <Popover
-              title={t("mainmenu.popover-support-help-center")}
-              content={
-                <Descriptions column={1} className={styles.popoverDescription}>
-                  <Descriptions.Item
-                    label={t("mainmenu.popover-support-help-center-version")}
-                  >
-                    0.0.0
-                    {/* {__SALTBOX_VERSION__} */}
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={t(
-                      "mainmenu.popover-support-help-center-saltbox-home"
-                    )}
-                  >
-                    <a href="https://saltbox.pro/" target="_blank">
-                      saltbox.pro
-                    </a>
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={t(
-                      "mainmenu.popover-support-help-center-saltbox-documentation"
-                    )}
-                  >
-                    <a href="https://saltbox.pro/docs/intro" target="_blank">
-                      saltbox.pro/docs/intro
-                    </a>
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={t(
-                      "mainmenu.popover-support-help-center-saltbox-git"
-                    )}
-                  >
-                    <a href="https://dev.saltbox.pro/explore" target="_blank">
-                      dev.saltbox.pro{" "}
-                    </a>
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={t("mainmenu.popover-support-help-center-email")}
-                  >
-                    <a href="mailto:info@saltbox.pro">info@saltbox.pro</a>
-                  </Descriptions.Item>
-                  <Descriptions.Item
-                    label={t(
-                      "mainmenu.popover-support-help-center-saltbox-community-in-telegram"
-                    )}
-                  >
-                    <a href="https://t.me/salt_box" target="_blank">
-                      @salt_box
-                    </a>
-                  </Descriptions.Item>
-                </Descriptions>
-              }
-            >
-              <Button
-                className={styles.mainMenuUserButton}
-                icon={<MatIcon icon="help"></MatIcon>}
-                color="primary"
-                variant="text"
-                size={"large"}
-                title={t("mainmenu.popover-support-help-center")}
-              />
-            </Popover>
-
-            <Button
-              color="primary"
-              variant="text"
-              className={styles.mainMenuUserButton}
-              icon={<MatIcon icon="logout"></MatIcon>}
-              size={"large"}
-              title={t("mainmenu.logout")}
-              onClick={() => {
-                //authStore.signOut(href);
-              }}
-            />
-          </Button.Group>
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: "logout",
-                  icon: <LogoutOutlined />,
-                  label: "Logout",
-                  onClick: handleLogout,
-                },
-              ],
-            }}
+                    <Button color="primary" variant="text">
+                      {localeStore.currentLocale.toUpperCase()}
+                    </Button>
+                  </Dropdown>
+                </Flex>
+              </div>
+            }
           >
             <Button
               type="text"
@@ -289,7 +174,7 @@ export const AppLayout = observer(
             >
               {userDisplayName}
             </Button>
-          </Dropdown>
+          </Popover>
         </Header>
         <Layout style={{ height: "calc(100vh - 64px)" }}>
           <Sider width={280} style={{ background: "white" }}>
