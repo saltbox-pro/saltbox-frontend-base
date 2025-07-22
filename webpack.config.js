@@ -1,6 +1,7 @@
 const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-react-ts");
 const path = require("path");
+const webpack = require('webpack');
 /* const CopyPlugin = require("copy-webpack-plugin"); */
 
 module.exports = (webpackConfigEnv, argv) => {
@@ -30,6 +31,12 @@ module.exports = (webpackConfigEnv, argv) => {
         }),
       ], */
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        DEVELOPMENT: argv.mode === 'development',
+        PRODUCTION: argv.mode === 'production',
+      }),
+    ],
     output: {
       filename: 'index.js',
     },
