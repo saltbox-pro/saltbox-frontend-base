@@ -36,7 +36,7 @@ const AuthWrapper = observer(({ authStore, children }) => {
 
       if (state) {
         authStore.handleSigninRedirectCallback()?.then(() => {
-          navigate({});
+          navigate("/core/minions");
         });
       } else {
         authStore.signIn(window.location.origin + location.pathname);
