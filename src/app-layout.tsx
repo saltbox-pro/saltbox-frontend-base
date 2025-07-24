@@ -223,12 +223,7 @@ export const AppLayout = observer(
             </div>
           </Sider>
           <Layout>
-            <Drawer
-              title="Basic Drawer"
-              onClose={closeDrawer}
-              open={drawerContent}
-              placement="left"
-            >
+            <Drawer onClose={closeDrawer} open={drawerContent} placement="left">
               <Parcel
                 config={drawerContent}
                 wrapWith="div"
