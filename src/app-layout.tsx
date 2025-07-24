@@ -7,6 +7,7 @@ import {
   Descriptions,
   Flex,
   Popover,
+  Drawer,
 } from "antd";
 import { Link } from "react-router";
 import {
@@ -15,15 +16,19 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { observer } from "mobx-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const { Header, Sider, Content } = Layout;
 
 import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
+import Parcel from "single-spa-react/parcel";
 
-export const generateMenuItems = (config: any[]): MenuProps["items"] => {
+export const generateMenuItems = (
+  config: any[],
+  showDrawer: (content: any) => void
+): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
 
   config.forEach((item) => {
@@ -37,11 +42,13 @@ export const generateMenuItems = (config: any[]): MenuProps["items"] => {
       item.children.forEach((child) => {
         items.push({
           key: child.key,
-          label: child.path ? (
-            <Link to={child.path}>{child.label}</Link>
-          ) : (
-            child.label
-          ),
+          label:
+            child.path && !child.drawer ? (
+              <Link to={child.path}>{child.label}</Link>
+            ) : (
+              child.label
+            ),
+          onClick: child.drawer ? () => showDrawer(child.drawer) : undefined,
         });
       });
     } else {
@@ -69,6 +76,16 @@ export const AppLayout = observer(
   ({ authStore, menuStore, localeStore }: AppLayoutProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
+
+    const [drawerContent, setDrawerContent] = useState<any>();
+
+    const showDrawer = (content: any) => {
+      setDrawerContent(content);
+    };
+
+    const closeDrawer = () => {
+      setDrawerContent(undefined);
+    };
 
     useEffect(() => {
       if (containerRef.current) {
@@ -191,7 +208,7 @@ export const AppLayout = observer(
                 defaultSelectedKeys={["1"]}
                 defaultOpenKeys={["sub1"]}
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateMenuItems(menuStore.menu)}
+                items={generateMenuItems(menuStore.menu, showDrawer)}
               />
               <div style={{ padding: 16 }}>
                 <Button
@@ -206,6 +223,18 @@ export const AppLayout = observer(
             </div>
           </Sider>
           <Layout>
+            <Drawer
+              title="Basic Drawer"
+              onClose={closeDrawer}
+              open={drawerContent}
+              placement="left"
+            >
+              <Parcel
+                config={drawerContent}
+                wrapWith="div"
+                onClose={() => closeDrawer()}
+              />
+            </Drawer>
             <Content
               style={{
                 margin: 0,
