@@ -13,7 +13,6 @@ import { Link } from "react-router";
 import {
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
@@ -26,6 +25,16 @@ import Parcel from "single-spa-react/parcel";
 
 import styles from "./app-layout.module.css";
 import "./app-layout.css";
+import { MatIcon, MatIconProps } from "./mat-icon";
+
+const MenuItemLabel = ({ label, icon }: { label: string, icon: MatIconProps["icon"] }) => {
+  return (
+    <Flex gap="small" align="center">
+      <MatIcon icon={icon} size="small" />
+      {label}
+    </Flex>
+  );
+};
 
 export const generateMenuItems = (
   config: any[],
@@ -46,9 +55,9 @@ export const generateMenuItems = (
           key: child.key,
           label:
             child.path && !child.drawer ? (
-              <Link to={child.path}>{child.label}</Link>
+              <Link to={child.path}><MenuItemLabel icon={child.icon} label={child.label} /></Link>
             ) : (
-              child.label
+              <MenuItemLabel icon={child.icon} label={child.label} />
             ),
           onClick: child.drawer ? () => showDrawer(child.drawer) : undefined,
         });
@@ -57,9 +66,9 @@ export const generateMenuItems = (
       items.push({
         key: item.key,
         label: item.path ? (
-          <Link to={item.path}>{item.label}</Link>
+          <Link to={item.path}><MenuItemLabel icon={item.icon} label={item.label} /></Link>
         ) : (
-          item.label
+          <MenuItemLabel icon={item.icon} label={item.label} />
         ),
       });
     }
@@ -127,7 +136,7 @@ export const AppLayout = observer(
     return (
       <Layout className={styles.layout}>
         <Header className={styles.header}>
-          <Link to="/">
+          <Link to="/core/minions">
             <img src={logo} alt="SALT.BOX" className={styles.logo} />
           </Link>
           <Popover
@@ -199,9 +208,7 @@ export const AppLayout = observer(
               }}
             >
               <Menu
-                mode="inline"
-                defaultSelectedKeys={["1"]}
-                defaultOpenKeys={["sub1"]}
+                mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateMenuItems(menuStore.menu, showDrawer)}
               />

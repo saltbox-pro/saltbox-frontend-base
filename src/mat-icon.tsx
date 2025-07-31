@@ -3,7 +3,7 @@ import "@material-symbols/font-300";
 import { MaterialSymbol } from "@material-symbols/font-300";
 
 type IconSize = "small" | "normal" | "large";
-type MatIconProps = {
+export type MatIconProps = {
   className?: string;
   icon: MaterialSymbol;
   size?: IconSize;
