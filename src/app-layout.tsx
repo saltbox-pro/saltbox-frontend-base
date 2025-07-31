@@ -205,16 +205,6 @@ export const AppLayout = observer(
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateMenuItems(menuStore.menu, showDrawer)}
               />
-              <div style={{ padding: 16 }}>
-                <Button
-                  type="text"
-                  icon={<SettingOutlined />}
-                  style={{ width: "100%" }}
-                  size="large"
-                >
-                  Settings
-                </Button>
-              </div>
             </div>
           </Sider>
           <Layout className={styles.mainLayoutContentWrapper}>

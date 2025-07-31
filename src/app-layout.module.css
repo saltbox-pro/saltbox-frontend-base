@@ -7,10 +7,14 @@
   align-items: center;
   justify-content: space-between;
   background-color: white;
+  padding: 10px 0 10px 16px;
+  line-height: var(--app-layout-line-height);
+  border-bottom: 1px solid #f0f0f0;
+  height: 38px;
 }
 
 .mainLayout {
-  height: calc(100vh - 64px);
+  height: calc(100vh - 38px);
 }
 
 .mainLayoutContentWrapper {}
@@ -21,11 +25,12 @@
   background: white;
   overflow: auto;
   height: 100%;
+  padding: var(--app-layout-gap) calc(var(--app-layout-gap) * 2) 0;
 }
 
 .logo {
-  width: 180px;
-  height: 34px;
+  width: 100px;
+  height: 18px;
 }
 
 .popoverContent {
