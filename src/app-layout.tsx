@@ -21,9 +21,11 @@ import { useTranslation } from "react-i18next";
 
 const { Header, Sider, Content } = Layout;
 
-import styles from "./app-layout.module.css";
 import logo from "./logo.svg";
 import Parcel from "single-spa-react/parcel";
+
+import styles from "./app-layout.module.css";
+import "./app-layout.css";
 
 export const generateMenuItems = (
   config: any[],
@@ -123,22 +125,15 @@ export const AppLayout = observer(
       "User";
 
     return (
-      <Layout style={{ height: "100vh" }}>
-        <Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: "white",
-          }}
-        >
+      <Layout className={styles.layout}>
+        <Header className={styles.header}>
           <Link to="/">
-            <img src={logo} alt="SALT.BOX" width="180px" height="34px" />
+            <img src={logo} alt="SALT.BOX" className={styles.logo} />
           </Link>
           <Popover
             trigger="click"
             content={
-              <div style={{ width: "400px" }}>
+              <div className={styles.popoverContent}>
                 <Descriptions
                   column={1}
                   items={[
@@ -193,7 +188,7 @@ export const AppLayout = observer(
             </Button>
           </Popover>
         </Header>
-        <Layout style={{ height: "calc(100vh - 64px)" }}>
+        <Layout className={styles.mainLayout}>
           <Sider width={280} style={{ background: "white" }}>
             <div
               style={{
@@ -222,7 +217,7 @@ export const AppLayout = observer(
               </div>
             </div>
           </Sider>
-          <Layout>
+          <Layout className={styles.mainLayoutContentWrapper}>
             <Drawer onClose={closeDrawer} open={drawerContent} placement="left">
               <Parcel
                 config={drawerContent}
@@ -231,18 +226,12 @@ export const AppLayout = observer(
               />
             </Drawer>
             <Content
-              style={{
-                margin: 0,
-                minHeight: 280,
-                background: "white",
-                overflow: "auto",
-                height: "100%",
-              }}
+              className={styles.mainLayoutContent}
             >
               <div
                 ref={containerRef}
                 id="app-container"
-                style={{ height: "100%" }}
+                className={styles.appContainer}
               ></div>
             </Content>
           </Layout>
