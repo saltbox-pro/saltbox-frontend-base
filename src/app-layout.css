@@ -32,3 +32,11 @@ body {
 .fast-table-column-nowrap {
   white-space: nowrap;
 }
+
+.ant-form-item {
+  margin-bottom: var(--app-layout-gap) !important;
+}
+
+.ant-form-item-label {
+  padding-bottom: calc(var(--app-layout-gap) / 4) !important;
+}
