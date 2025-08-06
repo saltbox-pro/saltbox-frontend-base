@@ -13,6 +13,7 @@ import { Link } from "react-router";
 import {
   UserOutlined,
   LogoutOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
@@ -27,7 +28,13 @@ import styles from "./app-layout.module.css";
 import "./app-layout.css";
 import { MatIcon, MatIconProps } from "./mat-icon";
 
-const MenuItemLabel = ({ label, icon }: { label: string, icon: MatIconProps["icon"] }) => {
+const MenuItemLabel = ({
+  label,
+  icon,
+}: {
+  label: string;
+  icon: MatIconProps["icon"];
+}) => {
   return (
     <Flex gap="small" align="center">
       <MatIcon icon={icon} size="small" />
@@ -36,7 +43,7 @@ const MenuItemLabel = ({ label, icon }: { label: string, icon: MatIconProps["ico
   );
 };
 
-export const generateMenuItems = (
+export const generateMainMenuItems = (
   config: any[],
   showDrawer: (content: any) => void
 ): MenuProps["items"] => {
@@ -55,7 +62,9 @@ export const generateMenuItems = (
           key: child.key,
           label:
             child.path && !child.drawer ? (
-              <Link to={child.path}><MenuItemLabel icon={child.icon} label={child.label} /></Link>
+              <Link to={child.path}>
+                <MenuItemLabel icon={child.icon} label={child.label} />
+              </Link>
             ) : (
               <MenuItemLabel icon={child.icon} label={child.label} />
             ),
@@ -66,10 +75,42 @@ export const generateMenuItems = (
       items.push({
         key: item.key,
         label: item.path ? (
-          <Link to={item.path}><MenuItemLabel icon={item.icon} label={item.label} /></Link>
+          <Link to={item.path}>
+            <MenuItemLabel icon={item.icon} label={item.label} />
+          </Link>
         ) : (
           <MenuItemLabel icon={item.icon} label={item.label} />
         ),
+      });
+    }
+  });
+
+  return items;
+};
+
+export const generateSettingsMenuItems = (
+  config: any[],
+  closeDrawer: () => void
+): MenuProps["items"] => {
+  const items: MenuProps["items"] = [];
+
+  config.forEach((item) => {
+    if (item.children) {
+      items.push({
+        type: "group",
+        key: item.key,
+        label: item.label,
+      });
+
+      item.children.forEach((child) => {
+        items.push({
+          key: child.key,
+          label: (
+            <Link to={child.path} onClick={() => closeDrawer()}>
+              <MenuItemLabel icon={child.icon} label={child.label} />
+            </Link>
+          ),
+        });
       });
     }
   });
@@ -88,15 +129,17 @@ export const AppLayout = observer(
     const containerRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation();
 
-    const [drawerContent, setDrawerContent] = useState<any>();
+    const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
 
-    const showDrawer = (content: any) => {
-      setDrawerContent(content);
+    const showParcelDrawer = (content: any) => {
+      setParcelDrawerContent(content);
     };
 
-    const closeDrawer = () => {
-      setDrawerContent(undefined);
+    const closeParcelDrawer = () => {
+      setParcelDrawerContent(undefined);
     };
+
+    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     useEffect(() => {
       if (containerRef.current) {
@@ -210,21 +253,47 @@ export const AppLayout = observer(
               <Menu
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateMenuItems(menuStore.menu, showDrawer)}
+                items={generateMainMenuItems(menuStore.menu, showParcelDrawer)}
               />
+              <div style={{ padding: 16 }}>
+                <Button
+                  type="text"
+                  icon={<SettingOutlined />}
+                  style={{ width: "100%" }}
+                  size="large"
+                  onClick={() => setIsSettingsDrawerOpen(true)}
+                >
+                  Settings
+                </Button>
+              </div>
             </div>
           </Sider>
           <Layout className={styles.mainLayoutContentWrapper}>
-            <Drawer onClose={closeDrawer} open={drawerContent} placement="left">
-              <Parcel
-                config={drawerContent}
-                wrapWith="div"
-                onClose={() => closeDrawer()}
+            <Drawer
+              onClose={() => setIsSettingsDrawerOpen(false)}
+              open={isSettingsDrawerOpen}
+              placement="left"
+            >
+              <Menu
+                mode="vertical"
+                style={{ borderRight: 0, flex: 1 }}
+                items={generateSettingsMenuItems(menuStore.settings, () =>
+                  setIsSettingsDrawerOpen(false)
+                )}
               />
             </Drawer>
-            <Content
-              className={styles.mainLayoutContent}
+            <Drawer
+              onClose={closeParcelDrawer}
+              open={parcelDrawerContent}
+              placement="left"
             >
+              <Parcel
+                config={parcelDrawerContent}
+                wrapWith="div"
+                onClose={() => closeParcelDrawer()}
+              />
+            </Drawer>
+            <Content className={styles.mainLayoutContent}>
               <div
                 ref={containerRef}
                 id="app-container"
