@@ -45,10 +45,10 @@ const MenuItemLabel = ({
 
 export const generateMainMenuItems = (
   config: any[],
-  showDrawer: (content: any) => void
+  showDrawer: (content: any) => void,
+  locale: string
 ): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
-
   config.forEach((item) => {
     if (item.children) {
       items.push({
@@ -58,15 +58,16 @@ export const generateMainMenuItems = (
       });
 
       item.children.forEach((child) => {
+        const elementLabel = child.label[locale];
         items.push({
           key: child.key,
           label:
             child.path && !child.drawer ? (
               <Link to={child.path}>
-                <MenuItemLabel icon={child.icon} label={child.label} />
+                <MenuItemLabel icon={child.icon} label={elementLabel} />
               </Link>
             ) : (
-              <MenuItemLabel icon={child.icon} label={child.label} />
+              <MenuItemLabel icon={child.icon} label={elementLabel} />
             ),
           onClick: child.drawer ? () => showDrawer(child.drawer) : undefined,
         });
@@ -90,7 +91,8 @@ export const generateMainMenuItems = (
 
 export const generateSettingsMenuItems = (
   config: any[],
-  closeDrawer: () => void
+  closeDrawer: () => void,
+  locale: string
 ): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
 
@@ -103,11 +105,12 @@ export const generateSettingsMenuItems = (
       });
 
       item.children.forEach((child) => {
+        const elementLabel = child.label[locale];
         items.push({
           key: child.key,
           label: (
             <Link to={child.path} onClick={() => closeDrawer()}>
-              <MenuItemLabel icon={child.icon} label={child.label} />
+              <MenuItemLabel icon={child.icon} label={elementLabel} />
             </Link>
           ),
         });
@@ -253,7 +256,11 @@ export const AppLayout = observer(
               <Menu
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateMainMenuItems(menuStore.menu, showParcelDrawer)}
+                items={generateMainMenuItems(
+                  menuStore.menu,
+                  showParcelDrawer,
+                  localeStore.currentLocale
+                )}
               />
               <div style={{ padding: 16 }}>
                 <Button
@@ -277,8 +284,10 @@ export const AppLayout = observer(
               <Menu
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateSettingsMenuItems(menuStore.settings, () =>
-                  setIsSettingsDrawerOpen(false)
+                items={generateSettingsMenuItems(
+                  menuStore.settings,
+                  () => setIsSettingsDrawerOpen(false),
+                  localeStore.currentLocale
                 )}
               />
             </Drawer>
