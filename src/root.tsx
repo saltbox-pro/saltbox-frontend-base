@@ -36,10 +36,12 @@ const AuthWrapper = observer(({ authStore, children }) => {
 
       if (state) {
         authStore.handleSigninRedirectCallback()?.then(() => {
-          navigate("/core/minions");
+          const pathname = location.pathname;
+          if (pathname === "/") navigate("/core/minions");
+          else navigate(pathname);
         });
       } else {
-        authStore.signIn(window.location.origin + location.pathname);
+        authStore.signIn(window.location.href);
       }
     }
   }, [

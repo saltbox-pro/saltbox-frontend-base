@@ -167,7 +167,7 @@ export const AppLayout = observer(
 
     const handleLogout = () => {
       if (authStore) {
-        authStore.signOut();
+        authStore.signOut(window.location.href);
       }
     };
 
