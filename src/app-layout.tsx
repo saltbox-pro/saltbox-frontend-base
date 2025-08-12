@@ -19,7 +19,7 @@ import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 import logo from "./logo.svg";
 import Parcel from "single-spa-react/parcel";
@@ -220,6 +220,7 @@ export const AppLayout = observer(
                 <img src={logo} alt="SALT.BOX" className={styles.logo} />
               </Link>
               <Menu
+                selectedKeys={[]}
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateMainMenuItems(
@@ -317,6 +318,7 @@ export const AppLayout = observer(
               getContainer={false}
             >
               <Menu
+                selectedKeys={[]}
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateSettingsMenuItems(
