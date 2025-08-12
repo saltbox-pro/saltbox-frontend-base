@@ -244,12 +244,6 @@ export const AppLayout = observer(
                         ]}
                       />
                       <Flex justify="flex-end" gap="small">
-                        <Button
-                          color="primary"
-                          variant="text"
-                          icon={<LogoutOutlined />}
-                          onClick={handleLogout}
-                        />
                         <Dropdown
                           menu={{
                             items: localeStore.supportedLocales.map(
@@ -267,6 +261,14 @@ export const AppLayout = observer(
                             {localeStore.currentLocale.toUpperCase()}
                           </Button>
                         </Dropdown>
+                        <Button
+                          color="primary"
+                          variant="text"
+                          icon={<LogoutOutlined />}
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
                       </Flex>
                     </div>
                   }
