@@ -301,6 +301,7 @@ export const AppLayout = observer(
                     icon={<UserOutlined />}
                     size="large"
                     style={{ width: "100%" }}
+                    onClick={closeAllDrawers}
                   >
                     {userDisplayName}
                   </Button>
