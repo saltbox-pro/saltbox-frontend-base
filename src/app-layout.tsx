@@ -306,7 +306,7 @@ export const AppLayout = observer(
           </Sider>
           <Layout className={styles.mainLayoutContentWrapper}>
             <Drawer
-              onClose={() => closeSettingsDrawer}
+              onClose={closeSettingsDrawer}
               open={isSettingsDrawerOpen}
               placement="left"
               getContainer={false}
