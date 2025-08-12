@@ -181,70 +181,12 @@ export const AppLayout = observer(
 
     return (
       <Layout className={styles.layout}>
-        <Header className={styles.header}>
-          <Link to="/core/minions">
-            <img src={logo} alt="SALT.BOX" className={styles.logo} />
-          </Link>
-          <Popover
-            trigger="click"
-            content={
-              <div className={styles.popoverContent}>
-                <Descriptions
-                  column={1}
-                  items={[
-                    {
-                      label: t("mainmenu.popover-user-info-username"),
-                      children: authStore.user?.profile.preferred_username,
-                    },
-                    {
-                      label: t("mainmenu.popover-user-info-email"),
-                      children: authStore.user?.profile.email,
-                    },
-                    {
-                      label: t("mainmenu.popover-user-info-first-name"),
-                      children: authStore.user?.profile.given_name,
-                    },
-                    {
-                      label: t("mainmenu.popover-user-info-last-name"),
-                      children: authStore.user?.profile.family_name,
-                    },
-                  ]}
-                />
-                <Flex justify="flex-end" gap="small">
-                  <Button
-                    color="primary"
-                    variant="text"
-                    icon={<LogoutOutlined />}
-                    onClick={handleLogout}
-                  />
-                  <Dropdown
-                    menu={{
-                      items: localeStore.supportedLocales.map((locale) => {
-                        return { key: locale, label: locale.toUpperCase() };
-                      }),
-                      onClick: ({ key }) => localeStore.setLocale(key),
-                    }}
-                  >
-                    <Button color="primary" variant="text">
-                      {localeStore.currentLocale.toUpperCase()}
-                    </Button>
-                  </Dropdown>
-                </Flex>
-              </div>
-            }
-          >
-            <Button
-              type="text"
-              icon={<UserOutlined />}
-              iconPosition="end"
-              size="large"
-            >
-              {userDisplayName}
-            </Button>
-          </Popover>
-        </Header>
         <Layout className={styles.mainLayout}>
-          <Sider width={280} style={{ background: "white" }}>
+          <Sider
+            width={250}
+            style={{ background: "white" }}
+            className={styles.sider}
+          >
             <div
               style={{
                 display: "flex",
@@ -253,6 +195,9 @@ export const AppLayout = observer(
                 justifyContent: "space-between",
               }}
             >
+              <Link to="/core/minions">
+                <img src={logo} alt="SALT.BOX" className={styles.logo} />
+              </Link>
               <Menu
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
@@ -262,7 +207,7 @@ export const AppLayout = observer(
                   localeStore.currentLocale
                 )}
               />
-              <div style={{ padding: 16 }}>
+              <div className={styles.menuButtons}>
                 <Button
                   type="text"
                   icon={<SettingOutlined />}
@@ -272,6 +217,69 @@ export const AppLayout = observer(
                 >
                   Settings
                 </Button>
+                <Popover
+                  trigger="click"
+                  content={
+                    <div className={styles.popoverContent}>
+                      <Descriptions
+                        column={1}
+                        items={[
+                          {
+                            label: t("mainmenu.popover-user-info-username"),
+                            children:
+                              authStore.user?.profile.preferred_username,
+                          },
+                          {
+                            label: t("mainmenu.popover-user-info-email"),
+                            children: authStore.user?.profile.email,
+                          },
+                          {
+                            label: t("mainmenu.popover-user-info-first-name"),
+                            children: authStore.user?.profile.given_name,
+                          },
+                          {
+                            label: t("mainmenu.popover-user-info-last-name"),
+                            children: authStore.user?.profile.family_name,
+                          },
+                        ]}
+                      />
+                      <Flex justify="flex-end" gap="small">
+                        <Button
+                          color="primary"
+                          variant="text"
+                          icon={<LogoutOutlined />}
+                          onClick={handleLogout}
+                        />
+                        <Dropdown
+                          menu={{
+                            items: localeStore.supportedLocales.map(
+                              (locale) => {
+                                return {
+                                  key: locale,
+                                  label: locale.toUpperCase(),
+                                };
+                              }
+                            ),
+                            onClick: ({ key }) => localeStore.setLocale(key),
+                          }}
+                        >
+                          <Button color="primary" variant="text">
+                            {localeStore.currentLocale.toUpperCase()}
+                          </Button>
+                        </Dropdown>
+                      </Flex>
+                    </div>
+                  }
+                >
+                  <Button
+                    type="text"
+                    icon={<UserOutlined />}
+                    size="large"
+                    style={{ width: "100%" }}
+                  >
+                    {userDisplayName}
+                  </Button>
+                </Popover>
               </div>
             </div>
           </Sider>
@@ -280,6 +288,7 @@ export const AppLayout = observer(
               onClose={() => setIsSettingsDrawerOpen(false)}
               open={isSettingsDrawerOpen}
               placement="left"
+              getContainer={false}
             >
               <Menu
                 mode="vertical"
@@ -295,6 +304,7 @@ export const AppLayout = observer(
               onClose={closeParcelDrawer}
               open={parcelDrawerContent}
               placement="left"
+              getContainer={false}
             >
               <Parcel
                 config={parcelDrawerContent}

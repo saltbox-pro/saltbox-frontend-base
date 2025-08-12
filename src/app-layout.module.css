@@ -17,7 +17,10 @@
   height: calc(100vh - 38px);
 }
 
-.mainLayoutContentWrapper {}
+.mainLayoutContentWrapper {
+  position: relative;
+  overflow: hidden;
+}
 
 .mainLayoutContent {
   margin: 0;
@@ -29,8 +32,12 @@
 }
 
 .logo {
-  width: 100px;
-  height: 18px;
+  width: 154px;
+  margin: 8px 20px;
+}
+
+.sider {
+  border-right: 1px solid #f0f0f0;
 }
 
 .popoverContent {
@@ -39,4 +46,15 @@
 
 .appContainer {
   height: 100%;
+}
+
+.menuButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 4px 8px 4px;;
+}
+.menuButtons :global(.ant-btn) {
+  justify-content: start;
+  padding-left: 17px;
 }
