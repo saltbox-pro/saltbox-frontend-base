@@ -46,6 +46,7 @@ const MenuItemLabel = ({
 export const generateMainMenuItems = (
   config: any[],
   showDrawer: (content: any) => void,
+  closeAllDrawers: () => void,
   locale: string
 ): MenuProps["items"] => {
   const items: MenuProps["items"] = [];
@@ -69,7 +70,9 @@ export const generateMainMenuItems = (
             ) : (
               <MenuItemLabel icon={child.icon} label={elementLabel} />
             ),
-          onClick: child.drawer ? () => showDrawer(child.drawer) : undefined,
+          onClick: child.drawer
+            ? () => showDrawer(child.drawer)
+            : closeAllDrawers,
         });
       });
     } else {
@@ -135,15 +138,6 @@ export const AppLayout = observer(
     const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
     const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
-    const showParcelDrawer = (content: any) => {
-      setIsSettingsDrawerOpen(false);
-      setParcelDrawerContent(content);
-    };
-
-    const closeParcelDrawer = () => {
-      setParcelDrawerContent(undefined);
-    };
-
     useEffect(() => {
       if (containerRef.current) {
         const event = new CustomEvent("app-container-ready", {
@@ -167,6 +161,29 @@ export const AppLayout = observer(
         window.dispatchEvent(event);
       };
     }, []);
+
+    const showParcelDrawer = (content: any) => {
+      closeSettingsDrawer();
+      setParcelDrawerContent(content);
+    };
+
+    const closeParcelDrawer = () => {
+      setParcelDrawerContent(undefined);
+    };
+
+    const showSettingsDrawer = () => {
+      closeParcelDrawer();
+      setIsSettingsDrawerOpen(true);
+    };
+
+    const closeSettingsDrawer = () => {
+      setIsSettingsDrawerOpen(false);
+    };
+
+    const closeAllDrawers = () => {
+      closeParcelDrawer();
+      closeSettingsDrawer();
+    };
 
     const handleLogout = () => {
       if (authStore) {
@@ -204,6 +221,7 @@ export const AppLayout = observer(
                 items={generateMainMenuItems(
                   menuStore.menu,
                   showParcelDrawer,
+                  closeAllDrawers,
                   localeStore.currentLocale
                 )}
               />
@@ -213,14 +231,12 @@ export const AppLayout = observer(
                   icon={<SettingOutlined />}
                   style={{ width: "100%" }}
                   size="large"
-                  onClick={() => {
-                    closeParcelDrawer();
-                    setIsSettingsDrawerOpen(true);
-                  }}
+                  onClick={showSettingsDrawer}
                 >
                   Settings
                 </Button>
                 <Popover
+                  placement="rightBottom"
                   trigger="click"
                   content={
                     <div className={styles.popoverContent}>
@@ -290,7 +306,7 @@ export const AppLayout = observer(
           </Sider>
           <Layout className={styles.mainLayoutContentWrapper}>
             <Drawer
-              onClose={() => setIsSettingsDrawerOpen(false)}
+              onClose={() => closeSettingsDrawer}
               open={isSettingsDrawerOpen}
               placement="left"
               getContainer={false}
@@ -300,7 +316,7 @@ export const AppLayout = observer(
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateSettingsMenuItems(
                   menuStore.settings,
-                  () => setIsSettingsDrawerOpen(false),
+                  closeSettingsDrawer,
                   localeStore.currentLocale
                 )}
               />
@@ -314,7 +330,7 @@ export const AppLayout = observer(
               <Parcel
                 config={parcelDrawerContent}
                 wrapWith="div"
-                onClose={() => closeParcelDrawer()}
+                onClose={closeParcelDrawer}
               />
             </Drawer>
             <Content className={styles.mainLayoutContent}>
