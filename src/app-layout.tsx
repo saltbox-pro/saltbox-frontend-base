@@ -195,7 +195,7 @@ export const AppLayout = observer(
                 justifyContent: "space-between",
               }}
             >
-              <Link to="/core/minions">
+              <Link to="/core/minions" className={styles.logoContainer}>
                 <img src={logo} alt="SALT.BOX" className={styles.logo} />
               </Link>
               <Menu

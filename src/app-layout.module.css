@@ -32,8 +32,12 @@
 }
 
 .logo {
-  width: 154px;
+  width: 132px;
   margin: 14px 20px;
+}
+
+.logoContainer {
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .sider {
