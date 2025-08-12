@@ -133,16 +133,16 @@ export const AppLayout = observer(
     const { t } = useTranslation();
 
     const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
+    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     const showParcelDrawer = (content: any) => {
+      setIsSettingsDrawerOpen(false);
       setParcelDrawerContent(content);
     };
 
     const closeParcelDrawer = () => {
       setParcelDrawerContent(undefined);
     };
-
-    const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
     useEffect(() => {
       if (containerRef.current) {
@@ -213,7 +213,10 @@ export const AppLayout = observer(
                   icon={<SettingOutlined />}
                   style={{ width: "100%" }}
                   size="large"
-                  onClick={() => setIsSettingsDrawerOpen(true)}
+                  onClick={() => {
+                    closeParcelDrawer();
+                    setIsSettingsDrawerOpen(true);
+                  }}
                 >
                   Settings
                 </Button>
