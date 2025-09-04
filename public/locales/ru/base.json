@@ -1,0 +1,10 @@
+{
+  "mainmenu": {
+    "settings-button": "Настройки",
+    "popover-user-info-username": "Имя пользователя",
+    "popover-user-info-email": "Электронная почта",
+    "popover-user-info-first-name": "Имя",
+    "popover-user-info-last-name": "Фамилия",
+    "popover-user-logout-button": "Выход"
+  }
+}

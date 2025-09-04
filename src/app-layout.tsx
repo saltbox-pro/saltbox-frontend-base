@@ -238,7 +238,7 @@ export const AppLayout = observer(
                   size="large"
                   onClick={showSettingsDrawer}
                 >
-                  Settings
+                  {t("mainmenu.settings-button")}
                 </Button>
                 <Popover
                   placement="rightBottom"
@@ -291,7 +291,7 @@ export const AppLayout = observer(
                           icon={<LogoutOutlined />}
                           onClick={handleLogout}
                         >
-                          Logout
+                          {t("mainmenu.popover-user-logout-button")}
                         </Button>
                       </Flex>
                     </div>

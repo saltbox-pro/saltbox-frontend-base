@@ -3,6 +3,8 @@ import { BrowserRouter, useNavigate, useLocation } from "react-router";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { AppLayout } from "./app-layout";
+import { i18nStore } from "./store/i18n-store";
+import { autorun } from "mobx";
 
 const AuthWrapper = observer(({ authStore, children }) => {
   const navigate = useNavigate();
@@ -84,6 +86,11 @@ const AuthWrapper = observer(({ authStore, children }) => {
 
 export default observer(function Root(props) {
   const { authStore, menuStore, localeStore } = props;
+  useEffect(() => {
+    autorun(() => {
+      i18nStore.currentLanguage = localeStore.currentLocale;
+    });
+  }, []);
 
   return (
     <BrowserRouter>

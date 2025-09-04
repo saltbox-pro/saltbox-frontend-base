@@ -1,0 +1,10 @@
+{
+  "mainmenu": {
+    "settings-button": "Settings",
+    "popover-user-info-username": "Username",
+    "popover-user-info-email": "Email",
+    "popover-user-info-first-name": "First Name",
+    "popover-user-info-last-name": "Last Name",
+    "popover-user-logout-button": "Logout"
+  }
+}
