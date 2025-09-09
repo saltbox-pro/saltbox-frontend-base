@@ -196,6 +196,38 @@ export const AppLayout = observer(
       authStore?.user?.profile?.preferred_username ||
       "User";
 
+    const monitoringMenuItem: MenuProps["items"] = [
+      //TODO rework monitoring menu
+      {
+        type: "group",
+        key: "monitoring",
+        label: "Monitoring",
+      },
+      {
+        key: "dashboard",
+        label: (
+          <a href={"/grafana/dashboards"}>
+            <MenuItemLabel
+              icon={undefined as any}
+              label={
+                localeStore.currentLocale === "ru" ? "Дашборд" : "Dashboard"
+              }
+            />
+          </a>
+        ),
+      },
+      {
+        key: "logs",
+        label: (
+          <a href={"/grafana/a/grafana-lokiexplore-app"}>
+            <MenuItemLabel
+              icon={undefined as any}
+              label={localeStore.currentLocale === "ru" ? "Логи" : "Logs"}
+            />
+          </a>
+        ),
+      },
+    ];
     return (
       <Layout className={styles.layout}>
         <Layout className={styles.mainLayout}>
@@ -321,11 +353,14 @@ export const AppLayout = observer(
                 selectedKeys={[]}
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
-                items={generateSettingsMenuItems(
-                  menuStore.settings,
-                  closeSettingsDrawer,
-                  localeStore.currentLocale
-                )}
+                items={[
+                  ...generateSettingsMenuItems(
+                    menuStore.settings,
+                    closeSettingsDrawer,
+                    localeStore.currentLocale
+                  ),
+                  ...monitoringMenuItem,
+                ]}
               />
             </Drawer>
             <Drawer
