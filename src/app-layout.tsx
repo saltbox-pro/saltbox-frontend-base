@@ -206,7 +206,7 @@ export const AppLayout = observer(
       {
         key: "dashboard",
         label: (
-          <a href={"/grafana/dashboards"}>
+          <a href={"/grafana"}>
             <MenuItemLabel
               icon={undefined as any}
               label={
