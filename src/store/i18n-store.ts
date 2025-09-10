@@ -1,12 +1,23 @@
 import { initReactI18next } from "react-i18next";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import Backend from "i18next-http-backend";
+
+import enBase from "../../public/locales/en/base.json";
+import ruBase from "../../public/locales/ru/base.json";
 
 export enum AppLanguage {
   EN = "en",
   RU = "ru",
 }
+
+const resources = {
+  [AppLanguage.EN]: {
+    base: enBase,
+  },
+  [AppLanguage.RU]: {
+    base: ruBase,
+  },
+};
 
 class I18NStore {
   readonly supportedLanguages: Array<AppLanguage> = [
@@ -16,7 +27,6 @@ class I18NStore {
 
   constructor() {
     i18n
-      .use(Backend)
       .use(LanguageDetector)
       .use(initReactI18next)
       .init({
@@ -24,6 +34,7 @@ class I18NStore {
         ns: ["base"],
         defaultNS: "base",
         debug: false,
+        resources,
         detection: {
           order: ["localStorage", "navigator"],
           caches: ["localStorage"],
@@ -32,12 +43,6 @@ class I18NStore {
           escapeValue: false,
         },
         supportedLngs: this.supportedLanguages,
-        backend: {
-          loadPath: DEVELOPMENT
-            ? "http://localhost:4201/locales/{{lng}}/{{ns}}.json"
-            : "/static/base/locales/{{lng}}/{{ns}}.json",
-          allowMultiLoading: true,
-        },
         react: {
           useSuspense: true,
         },
