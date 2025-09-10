@@ -256,7 +256,7 @@ export const AppLayout = observer(
                 mode="vertical"
                 style={{ borderRight: 0, flex: 1 }}
                 items={generateMainMenuItems(
-                  menuStore.menu,
+                  menuStore.sortedMenu,
                   showParcelDrawer,
                   closeAllDrawers,
                   localeStore.currentLocale
@@ -355,7 +355,7 @@ export const AppLayout = observer(
                 style={{ borderRight: 0, flex: 1 }}
                 items={[
                   ...generateSettingsMenuItems(
-                    menuStore.settings,
+                    menuStore.sortedSettingsMenu,
                     closeSettingsDrawer,
                     localeStore.currentLocale
                   ),
