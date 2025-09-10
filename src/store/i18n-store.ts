@@ -1,14 +1,10 @@
 import { initReactI18next } from "react-i18next";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { AppLanguage } from "@saltbox/saltbox-frontend-common";
 
-import enBase from "../../public/locales/en/base.json";
-import ruBase from "../../public/locales/ru/base.json";
-
-export enum AppLanguage {
-  EN = "en",
-  RU = "ru",
-}
+import enBase from "../locales/en/base.json";
+import ruBase from "../locales/ru/base.json";
 
 const resources = {
   [AppLanguage.EN]: {

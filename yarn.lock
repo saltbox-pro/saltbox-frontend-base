@@ -1444,6 +1444,11 @@
     rc-resize-observer "^1.3.1"
     rc-util "^5.44.0"
 
+"@saltbox/saltbox-frontend-common@^0.0.8":
+  version "0.0.8"
+  resolved "https://dev.saltbox.pro/api/v4/projects/70/packages/npm/@saltbox/saltbox-frontend-common/-/@saltbox/saltbox-frontend-common-0.0.8.tgz#53bb82945ff18d126090ec0042359e8e4ab45212"
+  integrity sha1-U7uClF/xjRJgkOwAQjWejkq0UhI=
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.6.tgz#80c516a4dc264c2a69115e7578d62581ff455ed9"
