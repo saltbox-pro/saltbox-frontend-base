@@ -254,7 +254,7 @@ export const AppLayout = observer(
               <Menu
                 selectedKeys={[]}
                 mode="vertical"
-                style={{ borderRight: 0, flex: 1 }}
+                style={{ borderRight: 0, flex: 1, overflow: "auto" }}
                 items={generateMainMenuItems(
                   menuStore.sortedMenu,
                   showParcelDrawer,
