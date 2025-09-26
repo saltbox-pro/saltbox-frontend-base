@@ -372,6 +372,7 @@ export const AppLayout = observer(
               <Parcel
                 config={parcelDrawerContent}
                 wrapWith="div"
+                wrapClassName={styles.secondLevelMenuWrapper}
                 onClose={closeParcelDrawer}
               />
             </Drawer>
