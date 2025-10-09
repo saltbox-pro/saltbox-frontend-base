@@ -5,6 +5,11 @@ import { useEffect } from "react";
 import { AppLayout } from "./app-layout";
 import { i18nStore } from "./store/i18n-store";
 import { autorun } from "mobx";
+import {
+  publish,
+  UiEvent,
+  CleanupEventDetail,
+} from "@saltbox/saltbox-frontend-common";
 
 const AuthWrapper = observer(({ authStore, children }) => {
   const navigate = useNavigate();
@@ -53,6 +58,16 @@ const AuthWrapper = observer(({ authStore, children }) => {
     navigate,
     location.pathname,
   ]);
+
+  useEffect(() => {
+    if (authStore.error) {
+      // Publish UI event to close everything on the screen
+      publish<CleanupEventDetail>(UiEvent.CloseAllOverlays, {
+        reason: "auth_error",
+        context: { error: authStore.error.message },
+      });
+    }
+  }, [authStore.error]);
 
   if (authStore.error) {
     return (

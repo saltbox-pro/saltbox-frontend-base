@@ -27,6 +27,7 @@ import Parcel from "single-spa-react/parcel";
 import styles from "./app-layout.module.css";
 import "./app-layout.css";
 import { MatIcon, MatIconProps } from "./mat-icon";
+import { UiEvent, useUiCleanupEvent } from "@saltbox/saltbox-frontend-common";
 
 const MenuItemLabel = ({
   label,
@@ -161,6 +162,10 @@ export const AppLayout = observer(
         window.dispatchEvent(event);
       };
     }, []);
+
+    useUiCleanupEvent(() => {
+      closeAllDrawers();
+    }, [UiEvent.CloseAllOverlays, UiEvent.CloseAllDrawers]);
 
     const showParcelDrawer = (content: any) => {
       closeSettingsDrawer();
