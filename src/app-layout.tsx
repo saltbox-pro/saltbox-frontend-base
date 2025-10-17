@@ -7,7 +7,6 @@ import {
   Descriptions,
   Flex,
   Popover,
-  Drawer,
 } from "antd";
 import { Link } from "react-router";
 import {
@@ -18,6 +17,7 @@ import {
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Drawer } from "@saltbox/saltbox-frontend-common";
 
 const { Sider, Content } = Layout;
 
@@ -27,7 +27,6 @@ import Parcel from "single-spa-react/parcel";
 import styles from "./app-layout.module.css";
 import "./app-layout.css";
 import { MatIcon, MatIconProps } from "./mat-icon";
-import { UiEvent, useUiCleanupEvent } from "@saltbox/saltbox-frontend-common";
 
 const MenuItemLabel = ({
   label,
@@ -162,10 +161,6 @@ export const AppLayout = observer(
         window.dispatchEvent(event);
       };
     }, []);
-
-    useUiCleanupEvent(() => {
-      closeAllDrawers();
-    }, [UiEvent.CloseAllOverlays, UiEvent.CloseAllDrawers]);
 
     const showParcelDrawer = (content: any) => {
       closeSettingsDrawer();

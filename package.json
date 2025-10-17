@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@material-symbols/font-300": "^0.32.0",
-    "@saltbox/saltbox-frontend-common": "^0.0.22",
+    "@saltbox/saltbox-frontend-common": "^0.0.28",
     "@tanstack/react-table": "8.21.3",
     "@types/jest": "^27.0.1",
     "@types/react": "^17.0.19",
