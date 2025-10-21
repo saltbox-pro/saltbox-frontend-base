@@ -44,8 +44,19 @@ const AuthWrapper = observer(({ authStore, children }) => {
       if (state) {
         authStore.handleSigninRedirectCallback()?.then(() => {
           const pathname = location.pathname;
-          if (pathname === "/") navigate("/core/minions");
-          else navigate(pathname);
+          const urlParams = new URLSearchParams(window.location.search);
+          urlParams.delete("state");
+          urlParams.delete("session_state");
+          urlParams.delete("code");
+          urlParams.delete("iss");
+          const search = urlParams.toString();
+          const searchString = search ? `?${search}` : "";
+
+          if (pathname === "/") {
+            navigate(`/core/minions${searchString}`);
+          } else {
+            navigate(`${pathname}${searchString}`);
+          }
         });
       } else {
         authStore.signIn(window.location.href);
