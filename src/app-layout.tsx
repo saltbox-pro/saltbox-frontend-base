@@ -5,7 +5,6 @@ import {
   Button,
   Descriptions,
   Flex,
-  Popover,
 } from "antd";
 import { Link } from "react-router";
 import {
@@ -16,7 +15,7 @@ import {
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Drawer, Dropdown } from "@saltbox/saltbox-frontend-common";
+import { Drawer, Dropdown, Popover } from "@saltbox/saltbox-frontend-common";
 
 const { Sider, Content } = Layout;
 
