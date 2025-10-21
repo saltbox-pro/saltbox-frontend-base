@@ -2,7 +2,6 @@ import {
   Layout,
   Menu,
   MenuProps,
-  Dropdown,
   Button,
   Descriptions,
   Flex,
@@ -17,7 +16,7 @@ import {
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Drawer } from "@saltbox/saltbox-frontend-common";
+import { Drawer, Dropdown } from "@saltbox/saltbox-frontend-common";
 
 const { Sider, Content } = Layout;
 
