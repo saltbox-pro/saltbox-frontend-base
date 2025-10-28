@@ -1496,14 +1496,16 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
-"@saltbox/saltbox-frontend-common@^0.0.35":
-  version "0.0.35"
-  resolved "https://dev.saltbox.pro/api/v4/projects/70/packages/npm/@saltbox/saltbox-frontend-common/-/@saltbox/saltbox-frontend-common-0.0.35.tgz#e09b5af55e08fb93118a2cd0f946a0eef11d019a"
-  integrity sha1-4Jta9V4I+5MRiizQ+Uag7vEdAZo=
+"@saltbox/saltbox-frontend-common@^0.0.36":
+  version "0.0.36"
+  resolved "https://dev.saltbox.pro/api/v4/projects/70/packages/npm/@saltbox/saltbox-frontend-common/-/@saltbox/saltbox-frontend-common-0.0.36.tgz#fbb6e55f16d2591f1a926a561ee04d1901ef95b7"
+  integrity sha1-+7blXxbSWR8akmpWHuBNGQHvlbc=
   dependencies:
     "@material-symbols/font-300" "^0.38.0"
     "@react-querybuilder/antd" "^8.11.1"
     "@react-querybuilder/dnd" "^8.11.1"
+    "@tanstack/react-table" "^8.21.3"
+    "@tanstack/react-virtual" "^3.13.12"
     react-dnd "^16.0.1"
     react-dnd-html5-backend "^16.0.1"
     react-querybuilder "^8.11.1"
@@ -1532,7 +1534,7 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
   integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
-"@tanstack/react-table@8.21.3":
+"@tanstack/react-table@^8.21.3":
   version "8.21.3"
   resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.21.3.tgz#2c38c747a5731c1a07174fda764b9c2b1fb5e91b"
   integrity sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==
