@@ -13,9 +13,9 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { observer } from "mobx-react";
-import { useEffect, useRef, useState } from "react";
+import { ComponentProps, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Drawer, Dropdown, Popover } from "@saltbox/saltbox-frontend-common";
+import { Drawer, Dropdown, MatIcon, Popover } from "@saltbox/saltbox-frontend-common";
 
 const { Sider, Content } = Layout;
 
@@ -24,14 +24,13 @@ import Parcel from "single-spa-react/parcel";
 
 import styles from "./app-layout.module.css";
 import "./app-layout.css";
-import { MatIcon, MatIconProps } from "./mat-icon";
 
 const MenuItemLabel = ({
   label,
   icon,
 }: {
   label: string;
-  icon: MatIconProps["icon"];
+  icon: ComponentProps<typeof MatIcon>["icon"];
 }) => {
   return (
     <Flex gap="small" align="center">
