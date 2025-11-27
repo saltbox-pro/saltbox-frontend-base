@@ -260,15 +260,34 @@ export const AppLayout = observer(
                 )}
               />
               <div className={styles.menuButtons}>
-                <Button
-                  type="text"
-                  icon={<SettingOutlined />}
-                  style={{ width: "100%" }}
-                  size="large"
-                  onClick={showSettingsDrawer}
-                >
-                  {t("mainmenu.settings-button")}
-                </Button>
+                <Flex align="center" justify="space-between" gap="small">
+                  <Button
+                    type="text"
+                    icon={<SettingOutlined />}
+                    style={{ width: "100%" }}
+                    size="large"
+                    onClick={showSettingsDrawer}
+                  >
+                    {t("mainmenu.settings-button")}
+                  </Button>
+                  <Dropdown
+                    menu={{
+                      items: localeStore.supportedLocales.map(
+                        (locale) => {
+                          return {
+                            key: locale,
+                            label: locale.toUpperCase(),
+                          };
+                        }
+                      ),
+                      onClick: ({ key }) => localeStore.setLocale(key),
+                    }}
+                  >
+                    <Button color="primary" variant="text">
+                      {localeStore.currentLocale.toUpperCase()}
+                    </Button>
+                  </Dropdown>
+                </Flex>
                 <Popover
                   placement="rightBottom"
                   trigger="click"
@@ -297,23 +316,6 @@ export const AppLayout = observer(
                         ]}
                       />
                       <Flex justify="flex-end" gap="small">
-                        <Dropdown
-                          menu={{
-                            items: localeStore.supportedLocales.map(
-                              (locale) => {
-                                return {
-                                  key: locale,
-                                  label: locale.toUpperCase(),
-                                };
-                              }
-                            ),
-                            onClick: ({ key }) => localeStore.setLocale(key),
-                          }}
-                        >
-                          <Button color="primary" variant="text">
-                            {localeStore.currentLocale.toUpperCase()}
-                          </Button>
-                        </Dropdown>
                         <Button
                           color="primary"
                           variant="text"
