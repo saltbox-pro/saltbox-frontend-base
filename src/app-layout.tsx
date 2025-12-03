@@ -269,6 +269,7 @@ export const AppLayout = observer(
                     {t("mainmenu.settings-button")}
                   </Button>
                   <Dropdown
+                    trigger={['click']}
                     menu={{
                       items: localeStore.supportedLocales.map((locale) => {
                         return {
