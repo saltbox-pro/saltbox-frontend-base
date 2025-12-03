@@ -1,11 +1,4 @@
-import {
-  Layout,
-  Menu,
-  MenuProps,
-  Button,
-  Descriptions,
-  Flex,
-} from "antd";
+import { Layout, Menu, MenuProps, Button, Descriptions, Flex } from "antd";
 import { Link } from "react-router";
 import {
   UserOutlined,
@@ -15,7 +8,12 @@ import {
 import { observer } from "mobx-react";
 import { ComponentProps, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Drawer, Dropdown, MatIcon, Popover } from "@saltbox/saltbox-frontend-common";
+import {
+  Drawer,
+  Dropdown,
+  MatIcon,
+  Popover,
+} from "@saltbox/saltbox-frontend-common";
 
 const { Sider, Content } = Layout;
 
@@ -272,14 +270,12 @@ export const AppLayout = observer(
                   </Button>
                   <Dropdown
                     menu={{
-                      items: localeStore.supportedLocales.map(
-                        (locale) => {
-                          return {
-                            key: locale,
-                            label: locale.toUpperCase(),
-                          };
-                        }
-                      ),
+                      items: localeStore.supportedLocales.map((locale) => {
+                        return {
+                          key: locale,
+                          label: locale.toUpperCase(),
+                        };
+                      }),
                       onClick: ({ key }) => localeStore.setLocale(key),
                     }}
                   >
@@ -367,6 +363,7 @@ export const AppLayout = observer(
               open={parcelDrawerContent}
               placement="left"
               getContainer={false}
+              destroyOnHidden
             >
               <Parcel
                 config={parcelDrawerContent}
