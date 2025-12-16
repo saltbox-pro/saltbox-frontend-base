@@ -1,43 +1,25 @@
+import { publish, UiEvent, CleanupEventDetail } from "@saltbox/saltbox-frontend-common";
 import { Result, Spin, Button, Flex } from "antd";
-import { BrowserRouter, useNavigate, useLocation } from "react-router";
+import { autorun } from "mobx";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
+import { BrowserRouter, useNavigate, useLocation } from "react-router";
+
 import { AppLayout } from "./app-layout";
 import { i18nStore } from "./store/i18n-store";
-import { autorun } from "mobx";
-import {
-  publish,
-  UiEvent,
-  CleanupEventDetail,
-} from "@saltbox/saltbox-frontend-common";
 
 const AuthWrapper = observer(({ authStore, children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (
-      authStore &&
-      authStore.userConfig &&
-      !authStore.userManager &&
-      !authStore.isLoading
-    ) {
+    if (authStore && authStore.userConfig && !authStore.userManager && !authStore.isLoading) {
       authStore.initialize();
     }
-  }, [
-    authStore,
-    authStore.userConfig,
-    authStore.userManager,
-    authStore.isLoading,
-  ]);
+  }, [authStore, authStore.userConfig, authStore.userManager, authStore.isLoading]);
 
   useEffect(() => {
-    if (
-      authStore.userManager &&
-      authStore.userConfig &&
-      !authStore.user &&
-      !authStore.isSignOut
-    ) {
+    if (authStore.userManager && authStore.userConfig && !authStore.user && !authStore.isSignOut) {
       const urlParams = new URLSearchParams(window.location.search);
       const state = urlParams.get("state");
 
@@ -62,13 +44,7 @@ const AuthWrapper = observer(({ authStore, children }) => {
         authStore.signIn(window.location.href);
       }
     }
-  }, [
-    authStore.userConfig,
-    authStore.userManager,
-    authStore.user,
-    navigate,
-    location.pathname,
-  ]);
+  }, [authStore.userConfig, authStore.userManager, authStore.user, navigate, location.pathname]);
 
   useEffect(() => {
     if (authStore.error) {
@@ -121,11 +97,7 @@ export default observer(function Root(props) {
   return (
     <BrowserRouter>
       <AuthWrapper authStore={authStore}>
-        <AppLayout
-          authStore={authStore}
-          menuStore={menuStore}
-          localeStore={localeStore}
-        />
+        <AppLayout authStore={authStore} menuStore={menuStore} localeStore={localeStore} />
       </AuthWrapper>
     </BrowserRouter>
   );
