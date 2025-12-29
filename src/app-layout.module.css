@@ -37,7 +37,19 @@
 }
 
 .logoContainer {
-  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.logoContainer::before {
+  content: "";
+  display: flex;
+  height: 1px;
+  width: 100vw;
+  background-color: #f0f0f0;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .sider {
