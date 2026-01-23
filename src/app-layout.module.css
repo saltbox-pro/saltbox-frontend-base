@@ -29,6 +29,20 @@
   overflow: auto;
   height: 100%;
   padding: var(--app-layout-gap) calc(var(--app-layout-gap) * 2) 0;
+  position: relative;
+}
+
+.mainLayoutContent::before {
+  content: "";
+  display: flex;
+  height: 1px;
+  width: 100vw;
+  background-color: #f0f0f0;
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
 }
 
 .logo {
@@ -37,19 +51,7 @@
 }
 
 .logoContainer {
-  position: relative;
-}
-
-.logoContainer::before {
-  content: "";
-  display: flex;
-  height: 1px;
-  width: 100vw;
-  background-color: #f0f0f0;
-  position: absolute;
-  bottom: 0;
-  z-index: 1;
-  pointer-events: none;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .sider {
