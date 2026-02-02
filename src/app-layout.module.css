@@ -39,7 +39,7 @@
   width: 100%;
   background-color: var(--app-color-gray100);
   position: absolute;
-  top: 56px;
+  top: calc(var(--app-header-height) - 1px);
   left: 0;
   right: 0;
   pointer-events: none;
