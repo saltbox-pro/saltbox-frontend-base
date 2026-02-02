@@ -210,15 +210,8 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
   return (
     <Layout className={styles.layout}>
       <Layout className={styles.mainLayout}>
-        <Sider width={250} style={{ background: "white" }} className={styles.sider}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              justifyContent: "space-between",
-            }}
-          >
+        <Sider className={styles.sider} width={250}>
+          <Flex className={styles.siderContent} vertical>
             <Link to="/core/minions" className={styles.logoContainer} onClick={closeAllDrawers}>
               <img src={logo} alt="SALT.BOX" className={styles.logo} />
             </Link>
@@ -311,7 +304,7 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
                 </Button>
               </Popover>
             </div>
-          </div>
+          </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
           <Drawer
