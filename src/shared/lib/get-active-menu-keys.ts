@@ -14,9 +14,11 @@ export function getActiveMenuKeys(
 
   menuConfig.forEach((item) => {
     if (item.children) {
+      const matchingChildren: { key: string; path: string }[] = [];
+
       item.children.forEach((child: any) => {
         if (child.path && isPathActive(pathname, child.path)) {
-          selectedKeys.push(child.key);
+          matchingChildren.push({ key: child.key, path: child.path });
         }
 
         if (child.submenu) {
@@ -30,6 +32,13 @@ export function getActiveMenuKeys(
           }
         }
       });
+
+      if (matchingChildren.length > 0) {
+        const mostSpecific = matchingChildren.reduce((prev, current) =>
+          current.path.length > prev.path.length ? current : prev
+        );
+        selectedKeys.push(mostSpecific.key);
+      }
     } else if (item.path && isPathActive(pathname, item.path)) {
       selectedKeys.push(item.key);
     }
@@ -39,7 +48,20 @@ export function getActiveMenuKeys(
 }
 
 export function getActiveSubmenuKeys(pathname: string, submenuItems: any[]): string[] {
-  return submenuItems
+  const matchingItems = submenuItems
     .filter((item) => item.path && isPathActive(pathname, item.path))
-    .map((item) => item.key);
+    .map((item) => ({ key: item.key, path: item.path }));
+
+  if (matchingItems.length === 0) {
+    return [];
+  }
+
+  if (matchingItems.length === 1) {
+    return [matchingItems[0].key];
+  }
+
+  const mostSpecific = matchingItems.reduce((prev, current) =>
+    current.path.length > prev.path.length ? current : prev
+  );
+  return [mostSpecific.key];
 }
