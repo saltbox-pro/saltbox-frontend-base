@@ -1,0 +1,27 @@
+.container {
+  border-top: 1px solid var(--app-color-gray100);
+  padding: 4px 4px 0 4px;
+}
+
+.menu {
+  flex: 1;
+}
+
+.menu :global(.ant-menu-item) {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  padding-left: 17px;
+}
+
+.menu :global(.ant-menu-item .anticon) {
+  font-size: 16px;
+}
+
+.menu :global(.ant-menu-item.drawer-active) {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.languageButton {
+  align-self: center;
+}

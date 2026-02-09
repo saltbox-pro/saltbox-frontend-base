@@ -1,0 +1,13 @@
+.menuFooter {
+  padding: 4px 4px 14px 4px;
+}
+
+.fullWidthButton {
+  width: 100%;
+  justify-content: start;
+  padding-left: 17px;
+}
+
+.popoverContent {
+  width: 400px;
+}

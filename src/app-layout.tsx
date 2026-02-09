@@ -1,112 +1,18 @@
-import { UserOutlined, LogoutOutlined, SettingOutlined } from "@ant-design/icons";
-import { Drawer, Dropdown, MatIcon, Popover } from "@saltbox/saltbox-frontend-common";
-import { Layout, Menu, MenuProps, Button, Descriptions, Flex } from "antd";
+import { Layout, Flex } from "antd";
 import { observer } from "mobx-react";
-import { ComponentProps, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { useEffect, useRef, useState } from "react";
+
+import "./app-layout.css";
+import styles from "./app-layout.module.css";
+import { Logo } from "./components/logo";
+import { MainMenu } from "./components/main-menu";
+import { SettingsMenuBar } from "./components/settings-menu-bar";
+import { MenuFooter } from "./components/menu-footer";
+import { ParcelDrawer } from "./components/parcel-drawer";
+import { SettingsDrawer } from "./components/settings-drawer";
+import { SubmenuDrawer } from "./components/submenu-drawer";
 
 const { Sider, Content } = Layout;
-
-import Parcel from "single-spa-react/parcel";
-
-import styles from "./app-layout.module.css";
-import logo from "./logo.svg";
-import "./app-layout.css";
-
-const MenuItemLabel = ({
-  label,
-  icon,
-}: {
-  label: string;
-  icon: ComponentProps<typeof MatIcon>["icon"];
-}) => {
-  return (
-    <Flex gap="small" align="center">
-      <MatIcon icon={icon} size="small" />
-      {label}
-    </Flex>
-  );
-};
-
-export const generateMainMenuItems = (
-  config: any[],
-  showDrawer: (content: any) => void,
-  closeAllDrawers: () => void,
-  locale: string
-): MenuProps["items"] => {
-  const items: MenuProps["items"] = [];
-  config.forEach((item) => {
-    if (item.children) {
-      items.push({
-        type: "group",
-        key: item.key,
-        label: item.label,
-      });
-
-      item.children.forEach((child) => {
-        const elementLabel = child.label[locale];
-        items.push({
-          key: child.key,
-          label:
-            child.path && !child.drawer ? (
-              <Link to={child.path}>
-                <MenuItemLabel icon={child.icon} label={elementLabel} />
-              </Link>
-            ) : (
-              <MenuItemLabel icon={child.icon} label={elementLabel} />
-            ),
-          onClick: child.drawer ? () => showDrawer(child.drawer) : closeAllDrawers,
-        });
-      });
-    } else {
-      items.push({
-        key: item.key,
-        label: item.path ? (
-          <Link to={item.path}>
-            <MenuItemLabel icon={item.icon} label={item.label} />
-          </Link>
-        ) : (
-          <MenuItemLabel icon={item.icon} label={item.label} />
-        ),
-      });
-    }
-  });
-
-  return items;
-};
-
-export const generateSettingsMenuItems = (
-  config: any[],
-  closeDrawer: () => void,
-  locale: string
-): MenuProps["items"] => {
-  const items: MenuProps["items"] = [];
-
-  config.forEach((item) => {
-    if (item.children) {
-      items.push({
-        type: "group",
-        key: item.key,
-        label: item.label,
-      });
-
-      item.children.forEach((child) => {
-        const elementLabel = child.label[locale];
-        items.push({
-          key: child.key,
-          label: (
-            <Link to={child.path} onClick={() => closeDrawer()}>
-              <MenuItemLabel icon={child.icon} label={elementLabel} />
-            </Link>
-          ),
-        });
-      });
-    }
-  });
-
-  return items;
-};
 
 interface AppLayoutProps {
   authStore: any;
@@ -116,9 +22,12 @@ interface AppLayoutProps {
 
 export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLayoutProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
 
   const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
+  const [activeParcelKey, setActiveParcelKey] = useState<string | null>(null);
+  const [submenuDrawerContent, setSubmenuDrawerContent] = useState<any[] | null>(null);
+  const [activeSubmenuKey, setActiveSubmenuKey] = useState<string | null>(null);
+  const [isSubmenuDrawerOpen, setIsSubmenuDrawerOpen] = useState(false);
   const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -145,17 +54,56 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     };
   }, []);
 
-  const showParcelDrawer = (content: any) => {
+  const showParcelDrawer = (content: any, menuKey: string) => {
     closeSettingsDrawer();
+    closeSubmenuDrawer();
     setParcelDrawerContent(content);
+    setActiveParcelKey(menuKey);
   };
 
   const closeParcelDrawer = () => {
     setParcelDrawerContent(undefined);
+    setActiveParcelKey(null);
+  };
+
+  const toggleParcelDrawer = (content: any, menuKey: string) => {
+    if (parcelDrawerContent && activeParcelKey === menuKey) {
+      closeParcelDrawer();
+    } else {
+      showParcelDrawer(content, menuKey);
+    }
+  };
+
+  const showSubmenuDrawer = (submenu: any[], menuKey: string) => {
+    closeSettingsDrawer();
+    closeParcelDrawer();
+    setSubmenuDrawerContent(submenu);
+    setActiveSubmenuKey(menuKey);
+    setIsSubmenuDrawerOpen(true);
+  };
+
+  const closeSubmenuDrawer = () => {
+    setIsSubmenuDrawerOpen(false);
+  };
+
+  const toggleSubmenuDrawer = (submenu: any[], menuKey: string) => {
+    if (isSubmenuDrawerOpen && activeSubmenuKey === menuKey) {
+      closeSubmenuDrawer();
+    } else {
+      showSubmenuDrawer(submenu, menuKey);
+    }
+  };
+
+  const handleSubmenuDrawerAfterOpenChange = (open: boolean) => {
+    if (!open) {
+      setSubmenuDrawerContent(null);
+      setActiveSubmenuKey(null);
+    }
   };
 
   const showSettingsDrawer = () => {
     closeParcelDrawer();
+    closeSubmenuDrawer();
     setIsSettingsDrawerOpen(true);
   };
 
@@ -163,184 +111,69 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     setIsSettingsDrawerOpen(false);
   };
 
-  const closeAllDrawers = () => {
-    closeParcelDrawer();
-    closeSettingsDrawer();
-  };
-
-  const handleLogout = () => {
-    if (authStore) {
-      authStore.signOut(window.location.href);
+  const toggleSettingsDrawer = () => {
+    if (isSettingsDrawerOpen) {
+      closeSettingsDrawer();
+    } else {
+      showSettingsDrawer();
     }
   };
 
-  const userDisplayName =
-    authStore?.user?.profile?.name || authStore?.user?.profile?.preferred_username || "User";
+  const closeAllDrawers = () => {
+    closeParcelDrawer();
+    closeSubmenuDrawer();
+    closeSettingsDrawer();
+  };
 
-  const monitoringMenuItem: MenuProps["items"] = [
-    //TODO rework monitoring menu
-    {
-      type: "group",
-      key: "monitoring",
-      label: "Monitoring",
-    },
-    {
-      key: "dashboard",
-      label: (
-        <a href={"/grafana"}>
-          <MenuItemLabel
-            icon={undefined as any}
-            label={localeStore.currentLocale === "ru" ? "Дашборд" : "Dashboard"}
-          />
-        </a>
-      ),
-    },
-    {
-      key: "logs",
-      label: (
-        <a href={"/grafana/a/grafana-lokiexplore-app"}>
-          <MenuItemLabel
-            icon={undefined as any}
-            label={localeStore.currentLocale === "ru" ? "Логи" : "Logs"}
-          />
-        </a>
-      ),
-    },
-  ];
   return (
     <Layout className={styles.layout}>
       <Layout className={styles.mainLayout}>
         <Sider className={styles.sider} width={250}>
           <Flex className={styles.siderContent} vertical>
-            <Link to="/core/minions" className={styles.logoContainer} onClick={closeAllDrawers}>
-              <img src={logo} alt="SALT.BOX" className={styles.logo} />
-            </Link>
-            <Menu
-              selectedKeys={[]}
-              mode="vertical"
-              style={{ borderRight: 0, flex: 1, overflow: "auto" }}
-              items={generateMainMenuItems(
-                menuStore.sortedMenu,
-                showParcelDrawer,
-                closeAllDrawers,
-                localeStore.currentLocale
-              )}
+            <Logo onClick={closeAllDrawers} />
+
+            <MainMenu
+              menu={menuStore.sortedMenu}
+              toggleParcelDrawer={toggleParcelDrawer}
+              toggleSubmenuDrawer={toggleSubmenuDrawer}
+              closeAllDrawers={closeAllDrawers}
+              locale={localeStore.currentLocale}
+              activeDrawerKey={activeSubmenuKey || activeParcelKey}
             />
-            <div className={styles.menuButtons}>
-              <Flex align="center" justify="space-between" gap="small">
-                <Button
-                  type="text"
-                  icon={<SettingOutlined />}
-                  style={{ width: "100%" }}
-                  size="large"
-                  onClick={showSettingsDrawer}
-                >
-                  {t("mainmenu.settings-button")}
-                </Button>
-                <Dropdown
-                  trigger={["click"]}
-                  menu={{
-                    items: localeStore.supportedLocales.map((locale) => {
-                      return {
-                        key: locale,
-                        label: locale.toUpperCase(),
-                      };
-                    }),
-                    onClick: ({ key }) => localeStore.setLocale(key),
-                  }}
-                >
-                  <Button color="primary" variant="text">
-                    {localeStore.currentLocale.toUpperCase()}
-                  </Button>
-                </Dropdown>
-              </Flex>
-              <Popover
-                placement="rightBottom"
-                trigger="click"
-                content={
-                  <div className={styles.popoverContent}>
-                    <Descriptions
-                      column={1}
-                      items={[
-                        {
-                          label: t("mainmenu.popover-user-info-username"),
-                          children: authStore.user?.profile.preferred_username,
-                        },
-                        {
-                          label: t("mainmenu.popover-user-info-email"),
-                          children: authStore.user?.profile.email,
-                        },
-                        {
-                          label: t("mainmenu.popover-user-info-first-name"),
-                          children: authStore.user?.profile.given_name,
-                        },
-                        {
-                          label: t("mainmenu.popover-user-info-last-name"),
-                          children: authStore.user?.profile.family_name,
-                        },
-                      ]}
-                    />
-                    <Flex justify="flex-end" gap="small">
-                      <Button
-                        color="primary"
-                        variant="text"
-                        icon={<LogoutOutlined />}
-                        onClick={handleLogout}
-                      >
-                        {t("mainmenu.popover-user-logout-button")}
-                      </Button>
-                    </Flex>
-                  </div>
-                }
-              >
-                <Button
-                  type="text"
-                  icon={<UserOutlined />}
-                  size="large"
-                  style={{ width: "100%" }}
-                  onClick={closeAllDrawers}
-                >
-                  {userDisplayName}
-                </Button>
-              </Popover>
-            </div>
+
+            <SettingsMenuBar
+              settingsMenu={menuStore.sortedSettingsMenu}
+              localeStore={localeStore}
+              isSettingsDrawerOpen={isSettingsDrawerOpen}
+              toggleSettingsDrawer={toggleSettingsDrawer}
+            />
+
+            <MenuFooter authStore={authStore} closeAllDrawers={closeAllDrawers} />
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
-          <Drawer
+          <SettingsDrawer
+            isOpen={isSettingsDrawerOpen}
             onClose={closeSettingsDrawer}
-            open={isSettingsDrawerOpen}
-            placement="left"
-            getContainer={false}
-          >
-            <Menu
-              selectedKeys={[]}
-              mode="vertical"
-              style={{ borderRight: 0, flex: 1 }}
-              items={[
-                ...generateSettingsMenuItems(
-                  menuStore.sortedSettingsMenu,
-                  closeSettingsDrawer,
-                  localeStore.currentLocale
-                ),
-                ...monitoringMenuItem,
-              ]}
-            />
-          </Drawer>
-          <Drawer
+            settingsMenu={menuStore.sortedSettingsMenu}
+            locale={localeStore.currentLocale}
+          />
+
+          <ParcelDrawer
+            isOpen={!!parcelDrawerContent}
             onClose={closeParcelDrawer}
-            open={parcelDrawerContent}
-            placement="left"
-            getContainer={false}
-            destroyOnHidden
-          >
-            <Parcel
-              config={parcelDrawerContent}
-              wrapWith="div"
-              wrapClassName={styles.secondLevelMenuWrapper}
-              onClose={closeParcelDrawer}
-            />
-          </Drawer>
+            parcelConfig={parcelDrawerContent}
+          />
+
+          <SubmenuDrawer
+            isOpen={isSubmenuDrawerOpen}
+            onClose={closeSubmenuDrawer}
+            afterOpenChange={handleSubmenuDrawerAfterOpenChange}
+            submenuItems={submenuDrawerContent}
+            locale={localeStore.currentLocale}
+            onItemClick={closeAllDrawers}
+          />
+
           <Content className={styles.mainLayoutContent}>
             <div ref={containerRef} id="app-container" className={styles.appContainer}></div>
           </Content>
