@@ -1,0 +1,11 @@
+.logoContainer {
+  height: var(--app-header-height);
+  display: flex;
+  align-content: center;
+  border-bottom: 1px solid var(--app-color-gray100);
+}
+
+.logo {
+  width: 132px;
+  margin: 0 20px;
+}

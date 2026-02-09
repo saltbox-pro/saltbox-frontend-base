@@ -1,0 +1,8 @@
+.menu {
+  flex: 1;
+  overflow: auto;
+}
+
+.menu :global(.ant-menu-item.drawer-active) {
+  background-color: rgba(0, 0, 0, 0.06);
+}
