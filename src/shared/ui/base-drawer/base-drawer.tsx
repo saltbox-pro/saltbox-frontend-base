@@ -6,6 +6,7 @@ interface BaseDrawerProps extends PropsWithChildren {
   onClose: () => void;
   afterOpenChange?: (open: boolean) => void;
   destroyOnHidden?: boolean;
+  minWidth?: number;
 }
 
 export function BaseDrawer({
@@ -13,6 +14,7 @@ export function BaseDrawer({
   onClose,
   afterOpenChange,
   destroyOnHidden,
+  minWidth = 380,
   children,
 }: BaseDrawerProps) {
   return (
@@ -23,6 +25,13 @@ export function BaseDrawer({
       onClose={onClose}
       afterOpenChange={afterOpenChange}
       destroyOnHidden={destroyOnHidden}
+      styles={{
+        wrapper: {
+          minWidth,
+          width: "auto",
+          maxWidth: "calc(100vw - 250px)",
+        },
+      }}
     >
       {children}
     </Drawer>
