@@ -18,7 +18,13 @@ export function ParcelDrawer({
   parcelConfig,
 }: ParcelDrawerProps) {
   return (
-    <BaseDrawer isOpen={isOpen} onClose={onClose} afterOpenChange={afterOpenChange} destroyOnHidden>
+    <BaseDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      afterOpenChange={afterOpenChange}
+      destroyOnHidden
+      minWidth={420}
+    >
       <Parcel
         config={parcelConfig}
         wrapWith="div"
