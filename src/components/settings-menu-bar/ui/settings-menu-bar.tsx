@@ -5,8 +5,10 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 
-import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
+import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
+import { MONITORING_MENU_CONFIG } from "../../settings-drawer/constants/monitoring-menu-config";
+
 import styles from "./settings-menu-bar.module.css";
 
 interface SettingsMenuBarProps {
@@ -26,7 +28,7 @@ export function SettingsMenuBar({
   const location = useLocation();
 
   const { selectedKeys } = useMemo(
-    () => getActiveMenuKeys(location.pathname, settingsMenu),
+    () => getActiveMenuKeys(location.pathname, [...settingsMenu, MONITORING_MENU_CONFIG]),
     [location.pathname, settingsMenu]
   );
   const isSettingsActive = selectedKeys.length > 0;
