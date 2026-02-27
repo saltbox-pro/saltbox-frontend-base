@@ -2,10 +2,11 @@ import type { MenuProps } from "antd";
 import { useMemo } from "react";
 import { useLocation } from "react-router";
 
+import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
 import { BaseDrawer } from "../../../shared/ui/base-drawer/base-drawer";
 import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
-import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
+import { MONITORING_MENU_CONFIG } from "../constants/monitoring-menu-config";
 import { generateSettingsMenuItems } from "../lib/generate-settings-menu-items";
 
 interface SettingsDrawerProps {
@@ -27,37 +28,28 @@ export function SettingsDrawer({
 
   const monitoringMenuItem: MenuProps["items"] = useMemo(
     () => [
-      //TODO rework monitoring menu
       {
         type: "group",
-        key: "monitoring",
-        label: "Monitoring",
+        key: MONITORING_MENU_CONFIG.key,
+        label: MONITORING_MENU_CONFIG.label,
       },
-      {
-        key: "dashboard",
-        label: (
-          <a href={"/grafana"}>
-            <MenuItemLabel
-              icon={undefined as any}
-              label={locale === "ru" ? "Дашборд" : "Dashboard"}
-            />
-          </a>
-        ),
-      },
-      {
-        key: "logs",
-        label: (
-          <a href={"/grafana/a/grafana-lokiexplore-app"}>
-            <MenuItemLabel icon={undefined as any} label={locale === "ru" ? "Логи" : "Logs"} />
-          </a>
-        ),
-      },
+      ...MONITORING_MENU_CONFIG.children.map((child) => {
+        const label = typeof child.label === "object" ? child.label[locale] : child.label;
+        return {
+          key: child.key,
+          label: (
+            <a href={child.path}>
+              <MenuItemLabel icon={child.icon} label={label} />
+            </a>
+          ),
+        };
+      }),
     ],
     [locale]
   );
 
   const { selectedKeys, openKeys } = useMemo(
-    () => getActiveMenuKeys(location.pathname, settingsMenu),
+    () => getActiveMenuKeys(location.pathname, [...settingsMenu, MONITORING_MENU_CONFIG]),
     [location.pathname, settingsMenu]
   );
 
