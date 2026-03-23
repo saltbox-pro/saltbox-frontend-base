@@ -27,25 +27,29 @@ export const generateSettingsMenuItems = (
             label: <MenuItemLabel icon={child.icon} label={elementLabel} />,
             children: child.submenu.map((sub: any) => {
               const subLabel = typeof sub.label === "object" ? sub.label[locale] : sub.label;
-              return {
-                key: sub.key,
-                label: (
-                  <Link to={sub.path} onClick={() => closeDrawer()}>
-                    <MenuItemLabel icon={sub.icon} label={subLabel} />
-                  </Link>
-                ),
-              };
+              const subLink = sub.href ? (
+                <a href={sub.href} onClick={() => closeDrawer()}>
+                  <MenuItemLabel icon={sub.icon} label={subLabel} />
+                </a>
+              ) : (
+                <Link to={sub.path} onClick={() => closeDrawer()}>
+                  <MenuItemLabel icon={sub.icon} label={subLabel} />
+                </Link>
+              );
+              return { key: sub.key, label: subLink };
             }),
           });
         } else {
-          items.push({
-            key: child.key,
-            label: (
-              <Link to={child.path} onClick={() => closeDrawer()}>
-                <MenuItemLabel icon={child.icon} label={elementLabel} />
-              </Link>
-            ),
-          });
+          const link = child.href ? (
+            <a href={child.href} onClick={() => closeDrawer()}>
+              <MenuItemLabel icon={child.icon} label={elementLabel} />
+            </a>
+          ) : (
+            <Link to={child.path} onClick={() => closeDrawer()}>
+              <MenuItemLabel icon={child.icon} label={elementLabel} />
+            </Link>
+          );
+          items.push({ key: child.key, label: link });
         }
       });
     }

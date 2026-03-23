@@ -17,13 +17,14 @@ export function getActiveMenuKeys(
       const matchingChildren: { key: string; path: string }[] = [];
 
       item.children.forEach((child: any) => {
-        if (child.path && isPathActive(pathname, child.path)) {
-          matchingChildren.push({ key: child.key, path: child.path });
+        const itemPath = child.path ?? child.href;
+        if (itemPath && isPathActive(pathname, itemPath)) {
+          matchingChildren.push({ key: child.key, path: itemPath });
         }
 
         if (child.submenu) {
           const activeSubmenuItem = child.submenu.find(
-            (sub: any) => sub.path && isPathActive(pathname, sub.path)
+            (sub: any) => (sub.path ?? sub.href) && isPathActive(pathname, sub.path ?? sub.href)
           );
           if (activeSubmenuItem) {
             selectedKeys.push(child.key);

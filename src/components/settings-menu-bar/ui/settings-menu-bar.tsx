@@ -7,7 +7,6 @@ import { useLocation } from "react-router";
 
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
 import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
-import { MONITORING_MENU_CONFIG } from "../../settings-drawer/constants/monitoring-menu-config";
 
 import styles from "./settings-menu-bar.module.css";
 
@@ -28,7 +27,7 @@ export function SettingsMenuBar({
   const location = useLocation();
 
   const { selectedKeys } = useMemo(
-    () => getActiveMenuKeys(location.pathname, [...settingsMenu, MONITORING_MENU_CONFIG]),
+    () => getActiveMenuKeys(location.pathname, settingsMenu),
     [location.pathname, settingsMenu]
   );
   const isSettingsActive = selectedKeys.length > 0;
