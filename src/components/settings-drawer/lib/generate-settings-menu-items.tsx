@@ -3,6 +3,8 @@ import { Link } from "react-router";
 
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
 
+const externalHrefProps = { target: "_blank", rel: "noopener noreferrer" } as const;
+
 export const generateSettingsMenuItems = (
   config: any[],
   closeDrawer: () => void,
@@ -28,7 +30,7 @@ export const generateSettingsMenuItems = (
             children: child.submenu.map((sub: any) => {
               const subLabel = typeof sub.label === "object" ? sub.label[locale] : sub.label;
               const subLink = sub.href ? (
-                <a href={sub.href} onClick={() => closeDrawer()}>
+                <a href={sub.href} {...externalHrefProps} onClick={() => closeDrawer()}>
                   <MenuItemLabel icon={sub.icon} label={subLabel} />
                 </a>
               ) : (
@@ -41,7 +43,7 @@ export const generateSettingsMenuItems = (
           });
         } else {
           const link = child.href ? (
-            <a href={child.href} onClick={() => closeDrawer()}>
+            <a href={child.href} {...externalHrefProps} onClick={() => closeDrawer()}>
               <MenuItemLabel icon={child.icon} label={elementLabel} />
             </a>
           ) : (
