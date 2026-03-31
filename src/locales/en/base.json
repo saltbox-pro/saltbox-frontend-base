@@ -6,5 +6,11 @@
     "popover-user-info-first-name": "First Name",
     "popover-user-info-last-name": "Last Name",
     "popover-user-logout-button": "Logout"
+  },
+  "errors": {
+    "service-unavailable-message": "Service is temporarily unavailable. For details, go to the monitoring page.",
+    "service-unavailable-button": "Go to monitoring",
+    "not-found-message": "Sorry, the page you visited does not exist.",
+    "back-home-button": "Back Home"
   }
 }
