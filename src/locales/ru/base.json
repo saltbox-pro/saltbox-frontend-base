@@ -6,11 +6,5 @@
     "popover-user-info-first-name": "Имя",
     "popover-user-info-last-name": "Фамилия",
     "popover-user-logout-button": "Выход"
-  },
-  "errors": {
-    "service-unavailable-message": "Сервис временно недоступен. Для получения подробной информации перейдите на страницу мониторинга.",
-    "service-unavailable-button": "Перейти в мониторинг",
-    "not-found-message": "Извините, страница, которую вы посетили, не существует.",
-    "back-home-button": "На главную"
   }
 }
