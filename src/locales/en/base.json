@@ -6,5 +6,9 @@
     "popover-user-info-first-name": "First Name",
     "popover-user-info-last-name": "Last Name",
     "popover-user-logout-button": "Logout"
+  },
+  "base": {
+    "not-found": "Sorry, the page you visited does not exist.",
+    "back-home": "Back Home"
   }
 }

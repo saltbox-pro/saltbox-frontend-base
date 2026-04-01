@@ -6,5 +6,9 @@
     "popover-user-info-first-name": "Имя",
     "popover-user-info-last-name": "Фамилия",
     "popover-user-logout-button": "Выход"
+  },
+  "base": {
+    "not-found": "Извините, страница, которую вы посетили, не существует.",
+    "back-home": "На главную"
   }
 }

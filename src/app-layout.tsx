@@ -1,6 +1,7 @@
 import { Layout, Flex } from "antd";
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router";
 
 import "./app-layout.css";
 import styles from "./app-layout.module.css";
@@ -11,6 +12,7 @@ import { MenuFooter } from "./components/menu-footer";
 import { ParcelDrawer } from "./components/parcel-drawer";
 import { SettingsDrawer } from "./components/settings-drawer";
 import { SubmenuDrawer } from "./components/submenu-drawer";
+import { ModuleAccessError } from "./shared/ui/module-access-error/module-access-error";
 
 const { Sider, Content } = Layout;
 
@@ -21,6 +23,7 @@ interface AppLayoutProps {
 }
 
 export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLayoutProps) => {
+  const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
@@ -125,6 +128,9 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     closeSettingsDrawer();
   };
 
+  const isAvailableModulePath = menuStore.isAvailableModulePath?.(location.pathname) ?? true;
+  const shouldShowModuleError = location.pathname !== "/" && !isAvailableModulePath;
+
   return (
     <Layout className={styles.layout}>
       <Layout className={styles.mainLayout}>
@@ -175,7 +181,13 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
           />
 
           <Content className={styles.mainLayoutContent}>
-            <div ref={containerRef} id="app-container" className={styles.appContainer}></div>
+            <div
+              ref={containerRef}
+              id="app-container"
+              className={styles.appContainer}
+              style={shouldShowModuleError ? { display: "none" } : undefined}
+            ></div>
+            {shouldShowModuleError ? <ModuleAccessError /> : null}
           </Content>
         </Layout>
       </Layout>
