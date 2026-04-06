@@ -1,4 +1,4 @@
-import { Layout, Flex } from "antd";
+import { Layout, Flex, Spin } from "antd";
 import { observer } from "mobx-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
@@ -128,8 +128,11 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     closeSettingsDrawer();
   };
 
+  const isModulesLoading = menuStore.isModulesLoading ?? false;
   const isAvailableModulePath = menuStore.isAvailableModulePath?.(location.pathname) ?? true;
-  const shouldShowModuleError = location.pathname !== "/" && !isAvailableModulePath;
+  const shouldShowLoading = location.pathname !== "/" && isModulesLoading;
+  const shouldShowModuleError =
+    location.pathname !== "/" && !isModulesLoading && !isAvailableModulePath;
 
   return (
     <Layout className={styles.layout}>
@@ -185,8 +188,13 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
               ref={containerRef}
               id="app-container"
               className={styles.appContainer}
-              style={shouldShowModuleError ? { display: "none" } : undefined}
+              style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
             ></div>
+            {shouldShowLoading ? (
+              <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
+                <Spin size="large" />
+              </Flex>
+            ) : null}
             {shouldShowModuleError ? <ModuleAccessError /> : null}
           </Content>
         </Layout>
