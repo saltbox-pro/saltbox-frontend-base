@@ -44,5 +44,5 @@ body {
 }
 
 .ant-form-item-label {
-  padding-bottom: calc(var(--app-layout-gap) / 4) !important;
+  padding-bottom: calc(var(--app-layout-gap) / 3) !important;
 }
