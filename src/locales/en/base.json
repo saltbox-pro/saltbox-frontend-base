@@ -10,5 +10,8 @@
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",
     "back-home": "Back Home"
+  },
+  "errors": {
+    "connection-error": "Connection error. Please contact your administrator"
   }
 }

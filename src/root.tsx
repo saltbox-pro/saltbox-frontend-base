@@ -6,7 +6,9 @@ import { useEffect } from "react";
 import { BrowserRouter, useNavigate, useLocation } from "react-router";
 
 import { AppLayout } from "./app-layout";
+import { ServerErrorNotifier } from "./components/server-error-notifier";
 import { i18nStore } from "./store/i18n-store";
+import { serverErrorStore } from "./store/server-error-store";
 
 const AuthWrapper = observer(({ authStore, children }) => {
   const navigate = useNavigate();
@@ -94,8 +96,14 @@ export default observer(function Root(props) {
     });
   }, []);
 
+  useEffect(() => {
+    serverErrorStore.init();
+    return () => serverErrorStore.dispose();
+  }, []);
+
   return (
     <BrowserRouter>
+      <ServerErrorNotifier />
       <AuthWrapper authStore={authStore}>
         <AppLayout authStore={authStore} menuStore={menuStore} localeStore={localeStore} />
       </AuthWrapper>
