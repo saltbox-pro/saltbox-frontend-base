@@ -12,6 +12,10 @@
     "back-home": "Back Home"
   },
   "errors": {
-    "connection-error": "Connection error. Please contact your administrator"
+    "connection-error": "Connection error. Please contact your administrator",
+    "debug-info-copied": "Debug info copied",
+    "debug-info-copy-failed": "Failed to copy to clipboard",
+    "copy-debug-info": "Copy debug info",
+    "close": "Close"
   }
 }

@@ -40,13 +40,13 @@ export const ServerErrorNotifier = observer(() => {
       try {
         await navigator.clipboard.writeText(buildDebugInfo(error, fallbackMessage));
         messageApi.success({
-          content: "Debug info copied",
+          content: t("errors.debug-info-copied"),
           duration: 2,
           key: "global-server-error-copied",
         });
       } catch {
         messageApi.error({
-          content: "Failed to copy to clipboard",
+          content: t("errors.debug-info-copy-failed"),
           duration: 3,
           key: "global-server-error-copy-failed",
         });
@@ -70,7 +70,7 @@ export const ServerErrorNotifier = observer(() => {
             icon={<CopyOutlined />}
             style={{ padding: 0 }}
             onClick={handleCopy}
-            title="Copy debug info"
+            title={t("errors.copy-debug-info")}
           />
           <Button
             type="text"
@@ -78,7 +78,7 @@ export const ServerErrorNotifier = observer(() => {
             icon={<CloseOutlined />}
             style={{ padding: 0 }}
             onClick={handleClose}
-            title="Close"
+            title={t("errors.close")}
           />
         </Space>
       ),
