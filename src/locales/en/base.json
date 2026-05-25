@@ -5,7 +5,11 @@
     "popover-user-info-email": "Email",
     "popover-user-info-first-name": "First Name",
     "popover-user-info-last-name": "Last Name",
-    "popover-user-logout-button": "Logout"
+    "popover-user-logout-button": "Logout",
+    "popover-user-logged-in-as": "Logged in as",
+    "popover-user-info-full-name": "Full Name",
+    "popover-user-email-verified": "Email verified",
+    "popover-user-email-not-verified": "Email not verified"
   },
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",

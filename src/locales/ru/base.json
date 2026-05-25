@@ -5,7 +5,11 @@
     "popover-user-info-email": "Электронная почта",
     "popover-user-info-first-name": "Имя",
     "popover-user-info-last-name": "Фамилия",
-    "popover-user-logout-button": "Выход"
+    "popover-user-logout-button": "Выход",
+    "popover-user-logged-in-as": "Вошли как",
+    "popover-user-info-full-name": "Полное имя",
+    "popover-user-email-verified": "Email подтверждён",
+    "popover-user-email-not-verified": "Email не подтверждён"
   },
   "base": {
     "not-found": "Извините, страница, которую вы посетили, не существует.",

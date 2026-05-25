@@ -9,5 +9,45 @@
 }
 
 .popoverContent {
-  width: 400px;
+  width: 300px;
+}
+
+.userHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ant-color-split, #f0f0f0);
+  margin-bottom: 12px;
+}
+
+.loggedInAs {
+  font-size: 12px;
+}
+
+.username {
+  font-size: 16px;
+}
+
+.descriptions {
+  margin-bottom: 8px;
+}
+
+.emailStatus {
+  padding: 6px 0;
+  margin-bottom: 4px;
+}
+
+.emailVerifiedIcon {
+  color: var(--ant-color-success, #52c41a);
+}
+
+.emailNotVerifiedIcon {
+  color: var(--ant-color-warning, #faad14);
+}
+
+.logoutRow {
+  border-top: 1px solid var(--ant-color-split, #f0f0f0);
+  padding-top: 8px;
+  margin-top: 4px;
 }
