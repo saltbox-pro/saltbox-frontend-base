@@ -9,7 +9,8 @@
     "popover-user-logged-in-as": "Вошли как",
     "popover-user-info-full-name": "Полное имя",
     "popover-user-email-verified": "Email подтверждён",
-    "popover-user-email-not-verified": "Email не подтверждён"
+    "popover-user-email-not-verified": "Email не подтверждён",
+    "popover-user-language-select": "Выбор языка"
   },
   "base": {
     "not-found": "Извините, страница, которую вы посетили, не существует.",

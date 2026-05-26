@@ -1,5 +1,11 @@
-import { CheckCircleFilled, LogoutOutlined, UserOutlined, WarningFilled } from "@ant-design/icons";
-import { Popover } from "@saltbox/saltbox-frontend-common";
+import {
+  CheckCircleFilled,
+  GlobalOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  WarningFilled,
+} from "@ant-design/icons";
+import { Dropdown, Popover } from "@saltbox/saltbox-frontend-common";
 import { Button, Descriptions, Flex, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -7,10 +13,11 @@ import styles from "./menu-footer.module.css";
 
 interface MenuFooterProps {
   authStore: any;
+  localeStore: any;
   closeAllDrawers: () => void;
 }
 
-export function MenuFooter({ authStore, closeAllDrawers }: MenuFooterProps) {
+export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFooterProps) {
   const { t } = useTranslation();
 
   const handleLogout = () => {
@@ -80,6 +87,28 @@ export function MenuFooter({ authStore, closeAllDrawers }: MenuFooterProps) {
                 )}
               </Flex>
             )}
+
+            <Dropdown
+              trigger={["click"]}
+              placement="topRight"
+              menu={{
+                items: localeStore.supportedLocales.map((locale: string) => ({
+                  key: locale,
+                  label: locale.toUpperCase(),
+                })),
+                onClick: ({ key }) => localeStore.setLocale(key),
+              }}
+            >
+              <Flex align="center" justify="space-between" className={styles.languageRow}>
+                <Flex align="center" gap={8}>
+                  <GlobalOutlined className={styles.languageRowIcon} />
+                  <Typography.Text>{t("mainmenu.popover-user-language-select")}</Typography.Text>
+                </Flex>
+                <Typography.Text type="secondary">
+                  {localeStore.currentLocale.toUpperCase()}
+                </Typography.Text>
+              </Flex>
+            </Dropdown>
 
             <Flex justify="flex-end" gap="small" className={styles.logoutRow}>
               <Button

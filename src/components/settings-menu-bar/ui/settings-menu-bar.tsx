@@ -1,6 +1,5 @@
 import { SettingOutlined } from "@ant-design/icons";
-import { Dropdown } from "@saltbox/saltbox-frontend-common";
-import { Button, Flex } from "antd";
+import { Flex } from "antd";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
@@ -12,14 +11,12 @@ import styles from "./settings-menu-bar.module.css";
 
 interface SettingsMenuBarProps {
   settingsMenu: any[];
-  localeStore: any;
   toggleSettingsDrawer: () => void;
   isSettingsDrawerOpen: boolean;
 }
 
 export function SettingsMenuBar({
   settingsMenu,
-  localeStore,
   toggleSettingsDrawer,
   isSettingsDrawerOpen,
 }: SettingsMenuBarProps) {
@@ -52,22 +49,6 @@ export function SettingsMenuBar({
         selectedKeys={isSettingsActive ? ["settings"] : []}
         items={items}
       />
-      <Dropdown
-        trigger={["click"]}
-        menu={{
-          items: localeStore.supportedLocales.map((locale) => {
-            return {
-              key: locale,
-              label: locale.toUpperCase(),
-            };
-          }),
-          onClick: ({ key }) => localeStore.setLocale(key),
-        }}
-      >
-        <Button color="primary" variant="text" className={styles.languageButton}>
-          {localeStore.currentLocale.toUpperCase()}
-        </Button>
-      </Dropdown>
     </Flex>
   );
 }

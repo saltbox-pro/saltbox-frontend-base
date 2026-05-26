@@ -152,12 +152,15 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
 
             <SettingsMenuBar
               settingsMenu={menuStore.sortedSettingsMenu}
-              localeStore={localeStore}
               isSettingsDrawerOpen={isSettingsDrawerOpen}
               toggleSettingsDrawer={toggleSettingsDrawer}
             />
 
-            <MenuFooter authStore={authStore} closeAllDrawers={closeAllDrawers} />
+            <MenuFooter
+              authStore={authStore}
+              localeStore={localeStore}
+              closeAllDrawers={closeAllDrawers}
+            />
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>

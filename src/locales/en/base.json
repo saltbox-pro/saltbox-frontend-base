@@ -9,7 +9,8 @@
     "popover-user-logged-in-as": "Logged in as",
     "popover-user-info-full-name": "Full Name",
     "popover-user-email-verified": "Email verified",
-    "popover-user-email-not-verified": "Email not verified"
+    "popover-user-email-not-verified": "Email not verified",
+    "popover-user-language-select": "Language"
   },
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",

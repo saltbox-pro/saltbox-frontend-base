@@ -30,12 +30,13 @@
 }
 
 .descriptions {
+  padding: 0 4px;
   margin-bottom: 8px;
 }
 
 .emailStatus {
-  padding: 6px 0;
-  margin-bottom: 4px;
+  padding: 6px 4px;
+  margin-bottom: 8px;
 }
 
 .emailVerifiedIcon {
@@ -44,6 +45,22 @@
 
 .emailNotVerifiedIcon {
   color: var(--ant-color-warning, #faad14);
+}
+
+.languageRow {
+  padding: 8px 4px;
+  cursor: pointer;
+  border-radius: var(--ant-border-radius, 6px);
+  margin-bottom: 4px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.languageRow:hover {
+  background-color: var(--ant-color-bg-text-hover, rgba(0, 0, 0, 0.06));
+}
+
+.languageRowIcon {
+  color: var(--ant-color-text-tertiary, #8c8c8c);
 }
 
 .logoutRow {
