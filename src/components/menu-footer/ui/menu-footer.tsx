@@ -90,7 +90,6 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
 
             <Dropdown
               trigger={["click"]}
-              placement="topRight"
               menu={{
                 items: localeStore.supportedLocales.map((locale: string) => ({
                   key: locale,

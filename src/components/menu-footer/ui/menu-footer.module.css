@@ -35,8 +35,9 @@
 }
 
 .emailStatus {
-  padding: 6px 4px;
-  margin-bottom: 8px;
+  padding: 6px 4px 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--ant-color-split, #f0f0f0);
 }
 
 .emailVerifiedIcon {
