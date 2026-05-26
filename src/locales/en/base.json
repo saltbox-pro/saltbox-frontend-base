@@ -8,6 +8,7 @@
     "popover-user-logout-button": "Logout",
     "popover-user-logged-in-as": "Logged in as",
     "popover-user-info-full-name": "Full Name",
+    "popover-user-fallback-name": "User",
     "popover-user-email-verified": "Email verified",
     "popover-user-email-not-verified": "Email not verified"
   },

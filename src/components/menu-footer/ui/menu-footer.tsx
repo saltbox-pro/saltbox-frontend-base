@@ -28,7 +28,7 @@ export function MenuFooter({ authStore, closeAllDrawers }: MenuFooterProps) {
   const email = profile?.email;
   const emailVerified = profile?.email_verified;
 
-  const userDisplayName = fullName || username || "User";
+  const userDisplayName = fullName || username || t("mainmenu.popover-user-fallback-name");
 
   const descriptionItems = [
     fullName && {
@@ -55,7 +55,7 @@ export function MenuFooter({ authStore, closeAllDrawers }: MenuFooterProps) {
                 {t("mainmenu.popover-user-logged-in-as")}
               </Typography.Text>
               <Typography.Text strong className={styles.username}>
-                {username}
+                {username || userDisplayName}
               </Typography.Text>
             </div>
 
