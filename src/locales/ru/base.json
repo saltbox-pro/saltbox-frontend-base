@@ -8,6 +8,7 @@
     "popover-user-logout-button": "Выход",
     "popover-user-logged-in-as": "Вошли как",
     "popover-user-info-full-name": "Полное имя",
+    "popover-user-fallback-name": "Пользователь",
     "popover-user-email-verified": "Email подтверждён",
     "popover-user-email-not-verified": "Email не подтверждён",
     "popover-user-language-select": "Выбор языка"
