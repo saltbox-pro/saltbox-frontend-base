@@ -109,16 +109,16 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
               </Flex>
             </Dropdown>
 
-            <Flex justify="flex-end" gap="small" className={styles.logoutRow}>
+            <div className={styles.logoutRow}>
               <Button
-                color="primary"
-                variant="text"
-                icon={<LogoutOutlined />}
+                type="text"
+                icon={<LogoutOutlined className={styles.logoutRowIcon} />}
                 onClick={handleLogout}
+                className={styles.logoutRowButton}
               >
                 {t("mainmenu.popover-user-logout-button")}
               </Button>
-            </Flex>
+            </div>
           </div>
         }
       >
