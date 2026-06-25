@@ -1,16 +1,25 @@
 import { MatIcon } from "@saltbox/saltbox-frontend-common";
 import { Flex } from "antd";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 interface MenuItemLabelProps {
   label: string;
-  icon: ComponentProps<typeof MatIcon>["icon"];
+  icon?: string | (() => ReactNode) | ReactNode;
 }
 
 export function MenuItemLabel({ label, icon }: MenuItemLabelProps) {
+  const renderedIcon =
+    typeof icon === "function" ? (
+      icon()
+    ) : typeof icon === "string" ? (
+      <MatIcon icon={icon as ComponentProps<typeof MatIcon>["icon"]} size="small" />
+    ) : (
+      icon
+    );
+
   return (
     <Flex gap="small" align="center">
-      <MatIcon icon={icon} size="small" />
+      {renderedIcon}
       {label}
     </Flex>
   );
