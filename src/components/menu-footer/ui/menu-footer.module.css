@@ -9,7 +9,8 @@
 }
 
 .popoverContent {
-  width: 300px;
+  min-width: 300px;
+  max-width: 450px;
 }
 
 .userHeader {
@@ -32,6 +33,15 @@
 .descriptions {
   padding: 0 4px;
   margin-bottom: 8px;
+}
+
+.descriptions :global(.ant-descriptions-view),
+.descriptions :global(.ant-descriptions-view table) {
+  width: auto;
+}
+
+.descriptions :global(.ant-descriptions-item-container) {
+  display: block;
 }
 
 .emailStatus {
