@@ -130,6 +130,7 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
 
   const isModulesLoading = menuStore.isModulesLoading ?? false;
   const isAvailableModulePath = menuStore.isAvailableModulePath?.(location.pathname) ?? true;
+  const isFullBleed = menuStore.isFullBleedModulePath?.(location.pathname) ?? false;
   const shouldShowLoading = location.pathname !== "/" && isModulesLoading;
   const shouldShowModuleError =
     location.pathname !== "/" && !isModulesLoading && !isAvailableModulePath;
@@ -186,7 +187,9 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
             onItemClick={closeAllDrawers}
           />
 
-          <Content className={styles.mainLayoutContent}>
+          <Content
+            className={`${styles.mainLayoutContent}${isFullBleed ? ` ${styles.mainLayoutContentFullBleed}` : ""}`}
+          >
             <div
               ref={containerRef}
               id="app-container"
