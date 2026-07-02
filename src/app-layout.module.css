@@ -50,6 +50,8 @@
   top: calc(var(--app-header-height) - 1px);
   left: 0;
   right: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .sider {
