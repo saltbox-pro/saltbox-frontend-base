@@ -2,6 +2,40 @@ function isPathActive(pathname: string, itemPath: string): boolean {
   return pathname === itemPath || pathname.startsWith(itemPath + "/");
 }
 
+function getMenuItemPaths(item: {
+  path?: string;
+  href?: string;
+  additionalActivePaths?: string[];
+}): string[] {
+  return [
+    ...(item.additionalActivePaths ?? []),
+    ...(item.path ? [item.path] : []),
+    ...(item.href ? [item.href] : []),
+  ];
+}
+
+function isMenuItemActive(
+  pathname: string,
+  item: { path?: string; href?: string; additionalActivePaths?: string[] }
+): boolean {
+  return getMenuItemPaths(item).some((itemPath) => isPathActive(pathname, itemPath));
+}
+
+function getLongestActiveMenuItemPath(
+  pathname: string,
+  item: { path?: string; href?: string; additionalActivePaths?: string[] }
+): string | null {
+  const matchingPaths = getMenuItemPaths(item).filter((itemPath) =>
+    isPathActive(pathname, itemPath)
+  );
+
+  if (matchingPaths.length === 0) {
+    return null;
+  }
+
+  return matchingPaths.reduce((prev, current) => (current.length > prev.length ? current : prev));
+}
+
 export function getActiveMenuKeys(
   pathname: string,
   menuConfig: any[]
@@ -17,14 +51,14 @@ export function getActiveMenuKeys(
       const matchingChildren: { key: string; path: string }[] = [];
 
       item.children.forEach((child: any) => {
-        const itemPath = child.path ?? child.href;
-        if (itemPath && isPathActive(pathname, itemPath)) {
-          matchingChildren.push({ key: child.key, path: itemPath });
+        const matchedPath = getLongestActiveMenuItemPath(pathname, child);
+        if (matchedPath) {
+          matchingChildren.push({ key: child.key, path: matchedPath });
         }
 
         if (child.submenu) {
-          const activeSubmenuItem = child.submenu.find(
-            (sub: any) => (sub.path ?? sub.href) && isPathActive(pathname, sub.path ?? sub.href)
+          const activeSubmenuItem = child.submenu.find((sub: any) =>
+            isMenuItemActive(pathname, sub)
           );
           if (activeSubmenuItem) {
             selectedKeys.push(child.key);
@@ -40,7 +74,7 @@ export function getActiveMenuKeys(
         );
         selectedKeys.push(mostSpecific.key);
       }
-    } else if (item.path && isPathActive(pathname, item.path)) {
+    } else if (isMenuItemActive(pathname, item)) {
       selectedKeys.push(item.key);
     }
   });
@@ -50,8 +84,11 @@ export function getActiveMenuKeys(
 
 export function getActiveSubmenuKeys(pathname: string, submenuItems: any[]): string[] {
   const matchingItems = submenuItems
-    .filter((item) => item.path && isPathActive(pathname, item.path))
-    .map((item) => ({ key: item.key, path: item.path }));
+    .map((item) => {
+      const matchedPath = getLongestActiveMenuItemPath(pathname, item);
+      return matchedPath ? { key: item.key, path: matchedPath } : null;
+    })
+    .filter((item): item is { key: string; path: string } => item !== null);
 
   if (matchingItems.length === 0) {
     return [];

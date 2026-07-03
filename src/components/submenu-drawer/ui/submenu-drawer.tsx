@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router";
 
+import { getActiveSubmenuKeys } from "../../../shared/lib/get-active-menu-keys";
 import { BaseDrawer } from "../../../shared/ui/base-drawer/base-drawer";
 import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
-import { getActiveSubmenuKeys } from "../../../shared/lib/get-active-menu-keys";
 
 interface SubmenuDrawerProps {
   isOpen: boolean;

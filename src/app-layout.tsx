@@ -7,10 +7,10 @@ import "./app-layout.css";
 import styles from "./app-layout.module.css";
 import { Logo } from "./components/logo";
 import { MainMenu } from "./components/main-menu";
-import { SettingsMenuBar } from "./components/settings-menu-bar";
 import { MenuFooter } from "./components/menu-footer";
 import { ParcelDrawer } from "./components/parcel-drawer";
 import { SettingsDrawer } from "./components/settings-drawer";
+import { SettingsMenuBar } from "./components/settings-menu-bar";
 import { SubmenuDrawer } from "./components/submenu-drawer";
 import { ModuleAccessError } from "./shared/ui/module-access-error/module-access-error";
 
