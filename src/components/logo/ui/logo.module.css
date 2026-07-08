@@ -3,9 +3,14 @@
   display: flex;
   align-content: center;
   border-bottom: 1px solid var(--app-color-gray100);
+  transition: background-color 0.15s ease;
+}
+
+.logoContainer:hover {
+  background-color: #fafafa;
 }
 
 .logo {
-  width: 132px;
+  width: 150px;
   margin: 0 20px;
 }
