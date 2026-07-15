@@ -1,3 +1,4 @@
+import { createSingleSpaErrorBoundary } from "@saltbox/saltbox-frontend-common";
 import React from "react";
 import ReactDOMClient from "react-dom/client";
 import singleSpaReact from "single-spa-react";
@@ -8,9 +9,7 @@ const lifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: Root,
-  errorBoundary(err, info, props) {
-    return null;
-  },
+  errorBoundary: createSingleSpaErrorBoundary("Base"),
 });
 
 export const { bootstrap, mount, unmount } = lifecycles;
