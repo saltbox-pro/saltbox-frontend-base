@@ -1,0 +1,176 @@
+.soft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.softMessage {
+  margin: 0;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.65));
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.softDetails {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--fill, rgba(0, 0, 0, 0.02));
+  border: 1px solid var(--border, #f0f0f0);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.titleMain {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.titleIcon {
+  flex-shrink: 0;
+  color: #ff4d4f;
+  font-size: 16px;
+}
+
+.titleText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  position: relative;
+  top: 1px;
+}
+
+.titleActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.detailsToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.detailsToggle:hover {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.detailsToggle:focus-visible {
+  outline: 2px solid #1677ff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.chevron {
+  font-size: 10px;
+}
+
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metaList {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.metaList dt {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.metaList dd {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.metaUrl {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+}
+
+.bodyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bodyLabel {
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+}
+
+.bodyPre {
+  margin: 0;
+  padding: 8px 10px;
+  max-height: 140px;
+  overflow: auto;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.75);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.noticeSoft {
+  width: min(440px, 90vw) !important;
+}
+
+.noticeSoft:global(.ant-notification-notice-with-icon) :global(.ant-notification-notice-message),
+.noticeSoft:global(.ant-notification-notice-with-icon)
+  :global(.ant-notification-notice-description) {
+  margin-inline-start: 0 !important;
+}
+
+.noticeSoft :global(.ant-notification-notice-icon) {
+  display: none;
+}
+
+.noticeSoft :global(.ant-notification-notice-message) {
+  margin-bottom: 8px;
+  margin-inline-start: 0 !important;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.noticeSoft :global(.ant-notification-notice-description) {
+  margin-inline-start: 0 !important;
+  font-size: 13px;
+}
