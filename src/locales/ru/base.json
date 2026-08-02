@@ -18,17 +18,7 @@
     "back-home": "На главную"
   },
   "errors": {
-    "connection-error": "Ошибка подключения к серверу. Обратитесь к администратору",
-    "debug-info-copied": "Отладочная информация скопирована",
-    "debug-info-copy-failed": "Не удалось скопировать в буфер обмена",
-    "copy-debug-info": "Скопировать отладочную информацию",
-    "show-details": "Показать детали",
-    "hide-details": "Скрыть детали",
-    "detail-method": "Метод",
-    "detail-url": "URL",
-    "detail-status": "Статус",
-    "detail-time": "Время",
-    "detail-response-body": "Ответ сервера",
-    "close": "Закрыть"
+    "unhandled-load": "Не удалось загрузить данные",
+    "copy-debug-info": "Скопировать отладочную информацию"
   }
 }
