@@ -18,7 +18,6 @@
     "back-home": "Back Home"
   },
   "errors": {
-    "unhandled-load": "Data failed to load",
-    "copy-debug-info": "Copy debug info"
+    "unhandled-load": "Data failed to load"
   }
 }

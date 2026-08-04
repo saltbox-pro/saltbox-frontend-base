@@ -1,18 +1,20 @@
-import { CopyOutlined } from "@ant-design/icons";
 import {
   ToastAction,
   ToastEventDetail,
   ToastType,
   UiEvent,
+  formatErrorCode,
   publish,
   subscribe,
   unsubscribe,
 } from "@saltbox/saltbox-frontend-common";
-import { Button, message, Space } from "antd";
+import { Button, Space } from "antd";
 import type { NotificationInstance } from "antd/es/notification/interface";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { navigateToUrl } from "single-spa";
+
+import { ErrorToastContent } from "../ui/error-toast-content";
 
 /** Политика длительностей — навязывается всем приложениям, в этом смысл host-а. */
 const DURATION_SEC: Record<ToastType, number> = {
@@ -22,17 +24,12 @@ const DURATION_SEC: Record<ToastType, number> = {
   info: 3,
 };
 
-const ToastActionButtons = ({
-  actions,
-  debugText,
-  copyLabel,
-}: {
-  actions?: ToastAction[];
-  debugText?: string;
-  copyLabel: string;
-}) => (
+/** Ключ для тостов без своего key: нужен, чтобы разворачивание деталей нашло свой тост. */
+let autoKeySeq = 0;
+
+const ToastActionButtons = ({ actions }: { actions: ToastAction[] }) => (
   <Space>
-    {actions?.map((action) => (
+    {actions.map((action) => (
       <Button
         key={action.label}
         size="small"
@@ -41,17 +38,6 @@ const ToastActionButtons = ({
         {action.label}
       </Button>
     ))}
-    {debugText ? (
-      <Button
-        size="small"
-        icon={<CopyOutlined />}
-        onClick={() =>
-          navigator.clipboard.writeText(debugText).catch(() => message.error(copyLabel))
-        }
-      >
-        {copyLabel}
-      </Button>
-    ) : null}
   </Space>
 );
 
@@ -61,27 +47,44 @@ const ToastActionButtons = ({
  * host-а, ready-событие сливает буферы загрузившихся раньше.
  */
 export function useToastBusSubscription(api: NotificationInstance): void {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
+
+  const showToast = useCallback(
+    (detail: ToastEventDetail, key: string, expanded: boolean) => {
+      const codeLine = detail.errorCode
+        ? formatErrorCode(detail.errorCode.status, detail.errorCode.kind, t)
+        : undefined;
+      const hasRichContent = Boolean(codeLine || detail.debugText);
+
+      api.open({
+        type: detail.type,
+        key,
+        message: detail.title,
+        description: hasRichContent ? (
+          <ErrorToastContent
+            codeLine={codeLine}
+            description={detail.description}
+            debugText={detail.debugText}
+            expanded={expanded}
+            // разворачивая детали, закрепляем тост — иначе он исчезнет во время чтения
+            onExpand={() => showToast(detail, key, true)}
+            onCollapse={() => showToast(detail, key, false)}
+          />
+        ) : (
+          detail.description
+        ),
+        duration: expanded ? 0 : (detail.durationSec ?? DURATION_SEC[detail.type]),
+        btn: detail.actions?.length ? <ToastActionButtons actions={detail.actions} /> : undefined,
+      });
+    },
+    [api, t]
+  );
 
   useEffect(() => {
     const listener = (event: Event) => {
       const detail = (event as CustomEvent<ToastEventDetail>).detail;
       if (!detail) return;
-      const hasButtons = Boolean(detail.actions?.length || detail.debugText);
-      api.open({
-        type: detail.type,
-        key: detail.key,
-        message: detail.title,
-        description: detail.description,
-        duration: detail.durationSec ?? DURATION_SEC[detail.type],
-        btn: hasButtons ? (
-          <ToastActionButtons
-            actions={detail.actions}
-            debugText={detail.debugText}
-            copyLabel={t("errors.copy-debug-info")}
-          />
-        ) : undefined,
-      });
+      showToast(detail, detail.key ?? `toast-${++autoKeySeq}`, false);
     };
 
     subscribe(UiEvent.Toast, listener);
@@ -92,5 +95,5 @@ export function useToastBusSubscription(api: NotificationInstance): void {
       window.__saltboxToastHostReady = false;
       unsubscribe(UiEvent.Toast, listener);
     };
-  }, [api, t]);
+  }, [showToast]);
 }
