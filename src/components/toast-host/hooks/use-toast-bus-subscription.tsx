@@ -9,6 +9,7 @@ import {
   unsubscribe,
 } from "@saltbox/saltbox-frontend-common";
 import { Button, Space } from "antd";
+import type { MessageInstance } from "antd/es/message/interface";
 import type { NotificationInstance } from "antd/es/notification/interface";
 import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -46,11 +47,25 @@ const ToastActionButtons = ({ actions }: { actions: ToastAction[] }) => (
  * replace по key. Handshake: window-флаг покрывает приложения, загрузившиеся позже
  * host-а, ready-событие сливает буферы загрузившихся раньше.
  */
-export function useToastBusSubscription(api: NotificationInstance): void {
+export function useToastBusSubscription(
+  api: NotificationInstance,
+  messageApi: MessageInstance
+): void {
   const { t } = useTranslation("common");
 
   const showToast = useCallback(
     (detail: ToastEventDetail, key: string, expanded: boolean) => {
+      // лёгкая поверхность: короткая строка по центру сверху (подтверждения копирования)
+      if (detail.surface === "message") {
+        messageApi.open({
+          type: detail.type,
+          key,
+          content: detail.title,
+          duration: detail.durationSec ?? DURATION_SEC[detail.type],
+        });
+        return;
+      }
+
       const codeLine = detail.errorCode
         ? formatErrorCode(detail.errorCode.status, detail.errorCode.kind, t)
         : undefined;
@@ -77,7 +92,7 @@ export function useToastBusSubscription(api: NotificationInstance): void {
         btn: detail.actions?.length ? <ToastActionButtons actions={detail.actions} /> : undefined,
       });
     },
-    [api, t]
+    [api, messageApi, t]
   );
 
   useEffect(() => {

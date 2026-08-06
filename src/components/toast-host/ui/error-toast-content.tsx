@@ -1,5 +1,6 @@
-import { CopyOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
-import { Button, Flex, message, Typography } from "antd";
+import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { CopyToClipboardButton } from "@saltbox/saltbox-frontend-common";
+import { Button, Flex, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
 import styles from "./error-toast-content.module.css";
@@ -27,14 +28,6 @@ export const ErrorToastContent = ({
 }: ErrorToastContentProps) => {
   const { t } = useTranslation("common");
 
-  const handleCopy = () => {
-    if (!debugText) return;
-    navigator.clipboard
-      .writeText(debugText)
-      .then(() => message.success({ content: t("errors.debug-copied"), duration: 2 }))
-      .catch(() => message.error({ content: t("errors.debug-copy-failed"), duration: 3 }));
-  };
-
   return (
     <div className={styles.root}>
       {codeLine ? (
@@ -57,15 +50,17 @@ export const ErrorToastContent = ({
             >
               {expanded ? t("errors.hide-details") : t("errors.show-details")}
             </Button>
-            <Button
+            {/* общий компонент проекта: он же показывает сообщение об успехе копирования */}
+            <CopyToClipboardButton
+              text={debugText}
               type="link"
+              variant="link"
+              color="primary"
               size="small"
               className={styles.action}
-              icon={<CopyOutlined />}
-              onClick={handleCopy}
             >
               {t("errors.copy-debug")}
-            </Button>
+            </CopyToClipboardButton>
           </Flex>
 
           {expanded ? <pre className={styles.pre}>{debugText}</pre> : null}
