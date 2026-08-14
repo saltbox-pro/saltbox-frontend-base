@@ -1,5 +1,6 @@
 import { useToastRenderer, useUploadNoticeHost } from "@saltbox/saltbox-frontend-common";
 import { message, notification } from "antd";
+import { Fragment } from "react";
 import { navigateToUrl } from "single-spa";
 
 import { useToastBusSubscription } from "../hooks/use-toast-bus-subscription";
@@ -7,14 +8,14 @@ import { useUnhandledLoadNotification } from "../hooks/use-unhandled-load-notifi
 
 /**
  * Единственный отрисовщик эфемерных сообщений на весь продукт: toast notification,
- * message и upload notice. Локальных инстансов в приложениях быть не должно.
+ * message и progress-notice (upload/download). Локальных инстансов в приложениях быть не должно.
  */
 export const ToastHost = () => {
   const [notificationApi, notificationContextHolder] = notification.useNotification({
     maxCount: 5,
     stack: { threshold: 3 },
   });
-  const [uploadNotificationApi, uploadNotificationContextHolder] = notification.useNotification({
+  const [transferNoticeApi, transferNoticeContextHolder] = notification.useNotification({
     placement: "bottomRight",
     maxCount: 8,
     stack: false,
@@ -25,12 +26,12 @@ export const ToastHost = () => {
 
   useToastBusSubscription(showToast);
   useUnhandledLoadNotification(showToast);
-  useUploadNoticeHost(uploadNotificationApi);
+  useUploadNoticeHost(transferNoticeApi);
 
   return (
     <>
-      {notificationContextHolder}
-      {uploadNotificationContextHolder}
+      <Fragment key="toast-notification-holder">{notificationContextHolder}</Fragment>
+      <Fragment key="transfer-notice-holder">{transferNoticeContextHolder}</Fragment>
       {messageContextHolder}
     </>
   );
