@@ -1,5 +1,6 @@
 import { useToastRenderer, useUploadNoticeHost } from "@saltbox/saltbox-frontend-common";
 import { message, notification } from "antd";
+import { Fragment } from "react";
 import { navigateToUrl } from "single-spa";
 
 import { useToastBusSubscription } from "../hooks/use-toast-bus-subscription";
@@ -29,9 +30,9 @@ export const ToastHost = () => {
 
   return (
     <>
-      {notificationContextHolder}
-      {uploadNotificationContextHolder}
-      {messageContextHolder}
+      <Fragment key="toast-notification-holder">{notificationContextHolder}</Fragment>
+      <Fragment key="upload-notification-holder">{uploadNotificationContextHolder}</Fragment>
+      <Fragment key="toast-message-holder">{messageContextHolder}</Fragment>
     </>
   );
 };
