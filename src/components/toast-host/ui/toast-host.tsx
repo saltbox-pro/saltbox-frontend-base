@@ -33,7 +33,9 @@ export const ToastHost = () => {
   useToastBusSubscription(showToast);
   useUnhandledLoadNotification(showToast);
   useUploadNoticeHost(uploadNotificationApi);
-  useProcessNoticeHost(uploadNotificationApi);
+  useProcessNoticeHost(uploadNotificationApi, {
+    onNavigate: navigateToUrl,
+  });
 
   return (
     <>
