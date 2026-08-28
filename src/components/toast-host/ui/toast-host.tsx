@@ -1,7 +1,7 @@
 import {
   useProcessNoticeHost,
   useToastRenderer,
-  useUploadNoticeHost,
+  useFileTransferNoticeHost,
 } from "@saltbox/saltbox-frontend-common";
 import { message, notification } from "antd";
 import { Fragment } from "react";
@@ -12,14 +12,14 @@ import { useUnhandledLoadNotification } from "../hooks/use-unhandled-load-notifi
 
 /**
  * Единственный отрисовщик эфемерных сообщений на весь продукт: toast notification,
- * message, upload notice и process notice. Локальных инстансов в приложениях быть не должно.
+ * message, file transfer notice и process notice. Локальных инстансов в приложениях быть не должно.
  */
 export const ToastHost = () => {
   const [notificationApi, notificationContextHolder] = notification.useNotification({
     maxCount: 5,
     stack: { threshold: 3 },
   });
-  const [uploadNotificationApi, uploadNotificationContextHolder] = notification.useNotification({
+  const [fileTransferNoticeApi, fileTransferNoticeContextHolder] = notification.useNotification({
     placement: "bottomRight",
     maxCount: 12,
     stack: false,
@@ -32,15 +32,15 @@ export const ToastHost = () => {
 
   useToastBusSubscription(showToast);
   useUnhandledLoadNotification(showToast);
-  useUploadNoticeHost(uploadNotificationApi);
-  useProcessNoticeHost(uploadNotificationApi, {
+  useFileTransferNoticeHost(fileTransferNoticeApi);
+  useProcessNoticeHost(fileTransferNoticeApi, {
     onNavigate: navigateToUrl,
   });
 
   return (
     <>
       <Fragment key="toast-notification-holder">{notificationContextHolder}</Fragment>
-      <Fragment key="upload-notification-holder">{uploadNotificationContextHolder}</Fragment>
+      <Fragment key="file-transfer-notice-holder">{fileTransferNoticeContextHolder}</Fragment>
       <Fragment key="toast-message-holder">{messageContextHolder}</Fragment>
     </>
   );
