@@ -1,4 +1,9 @@
-import { publish, UiEvent, CleanupEventDetail } from "@saltbox/saltbox-frontend-common";
+import {
+  bindWebSocketAccessTokenSync,
+  publish,
+  UiEvent,
+  CleanupEventDetail,
+} from "@saltbox/saltbox-frontend-common";
 import { Result, Spin, Button, Flex } from "antd";
 import { autorun } from "mobx";
 import { observer } from "mobx-react";
@@ -89,6 +94,11 @@ const AuthWrapper = observer(({ authStore, children }) => {
 
 export default observer(function Root(props) {
   const { authStore, menuStore, localeStore } = props;
+
+  useEffect(() => {
+    return bindWebSocketAccessTokenSync(authStore);
+  }, [authStore]);
+
   useEffect(() => {
     autorun(() => {
       i18nStore.currentLanguage = localeStore.currentLocale;
