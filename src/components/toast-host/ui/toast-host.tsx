@@ -1,4 +1,8 @@
-import { useToastRenderer, useUploadNoticeHost } from "@saltbox/saltbox-frontend-common";
+import {
+  useProcessNoticeHost,
+  useToastRenderer,
+  useUploadNoticeHost,
+} from "@saltbox/saltbox-frontend-common";
 import { message, notification } from "antd";
 import { Fragment } from "react";
 import { navigateToUrl } from "single-spa";
@@ -8,7 +12,7 @@ import { useUnhandledLoadNotification } from "../hooks/use-unhandled-load-notifi
 
 /**
  * Единственный отрисовщик эфемерных сообщений на весь продукт: toast notification,
- * message и progress-notice (upload/download). Локальных инстансов в приложениях быть не должно.
+ * message, upload notice и process notice. Локальных инстансов в приложениях быть не должно.
  */
 export const ToastHost = () => {
   const [notificationApi, notificationContextHolder] = notification.useNotification({
@@ -17,22 +21,27 @@ export const ToastHost = () => {
   });
   const [transferNoticeApi, transferNoticeContextHolder] = notification.useNotification({
     placement: "bottomRight",
-    maxCount: 8,
+    maxCount: 12,
     stack: false,
   });
   const [messageApi, messageContextHolder] = message.useMessage();
 
-  const showToast = useToastRenderer(notificationApi, messageApi, { onNavigate: navigateToUrl });
+  const showToast = useToastRenderer(notificationApi, messageApi, {
+    onNavigate: navigateToUrl,
+  });
 
   useToastBusSubscription(showToast);
   useUnhandledLoadNotification(showToast);
-  useUploadNoticeHost(transferNoticeApi);
+  useUploadNoticeHost(uploadNotificationApi);
+  useProcessNoticeHost(uploadNotificationApi, {
+    onNavigate: navigateToUrl,
+  });
 
   return (
     <>
       <Fragment key="toast-notification-holder">{notificationContextHolder}</Fragment>
-      <Fragment key="transfer-notice-holder">{transferNoticeContextHolder}</Fragment>
-      {messageContextHolder}
+      <Fragment key="upload-notification-holder">{uploadNotificationContextHolder}</Fragment>
+      <Fragment key="toast-message-holder">{messageContextHolder}</Fragment>
     </>
   );
 };
