@@ -32,6 +32,7 @@ module.exports = (webpackConfigEnv, argv) => {
           include: [commonPath && path.resolve(__dirname, commonPath)].filter(
             (notEmpty) => !!notEmpty
           ),
+          exclude: /node_modules/,
           use: ["style-loader", "css-loader"],
         },
       ],

@@ -1,3 +1,4 @@
+import "@saltbox/saltbox-frontend-common/material-symbols";
 import { createSingleSpaErrorBoundary } from "@saltbox/saltbox-frontend-common";
 import React from "react";
 import ReactDOMClient from "react-dom/client";
