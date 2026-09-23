@@ -5,6 +5,9 @@ import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-labe
 
 const externalHrefProps = { target: "_blank", rel: "noopener noreferrer" } as const;
 
+const resolveLabel = (label: string | Record<string, string>, locale: string): string =>
+  typeof label === "object" ? label[locale] : label;
+
 export const generateSettingsMenuItems = (
   config: any[],
   closeDrawer: () => void,
@@ -17,18 +20,18 @@ export const generateSettingsMenuItems = (
       items.push({
         type: "group",
         key: item.key,
-        label: item.label,
+        label: resolveLabel(item.label, locale),
       });
 
       item.children.forEach((child) => {
-        const elementLabel = typeof child.label === "object" ? child.label[locale] : child.label;
+        const elementLabel = resolveLabel(child.label, locale);
 
         if (child.submenu) {
           items.push({
             key: child.key,
             label: <MenuItemLabel icon={child.icon} label={elementLabel} />,
             children: child.submenu.map((sub: any) => {
-              const subLabel = typeof sub.label === "object" ? sub.label[locale] : sub.label;
+              const subLabel = resolveLabel(sub.label, locale);
               const subLink = sub.href ? (
                 <a href={sub.href} {...externalHrefProps} onClick={() => closeDrawer()}>
                   <MenuItemLabel icon={sub.icon} label={subLabel} />
