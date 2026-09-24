@@ -47,6 +47,10 @@ body {
   padding-bottom: calc(var(--app-layout-gap) / 3) !important;
 }
 
+.ant-drawer .ant-drawer-body {
+  padding: 15px 24px !important;
+}
+
 .ant-card.ant-card-hoverable:hover {
   box-shadow: unset !important;
   border-color: #c4c4c4 !important;
