@@ -1,6 +1,8 @@
 import { Drawer } from "@saltbox/saltbox-frontend-common";
 import type { PropsWithChildren } from "react";
 
+import styles from "./base-drawer.module.css";
+
 interface BaseDrawerProps extends PropsWithChildren {
   isOpen: boolean;
   onClose: () => void;
@@ -25,6 +27,7 @@ export function BaseDrawer({
       onClose={onClose}
       afterOpenChange={afterOpenChange}
       destroyOnHidden={destroyOnHidden}
+      rootClassName={styles.drawer}
       styles={{
         wrapper: {
           minWidth,
