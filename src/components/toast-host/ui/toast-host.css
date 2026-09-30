@@ -1,0 +1,4 @@
+.ant-notification-stack > .ant-notification-notice-wrapper.ant-notification-fade-appear,
+.ant-notification-stack > .ant-notification-notice-wrapper.ant-notification-fade-enter {
+  transition: none;
+}

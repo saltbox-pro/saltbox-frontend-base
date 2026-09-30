@@ -9,6 +9,7 @@ import { navigateToUrl } from "single-spa";
 
 import { useToastBusSubscription } from "../hooks/use-toast-bus-subscription";
 import { useUnhandledLoadNotification } from "../hooks/use-unhandled-load-notification";
+import "./toast-host.css";
 
 /**
  * Единственный отрисовщик эфемерных сообщений на весь продукт: toast notification,
