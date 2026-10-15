@@ -5,7 +5,7 @@ import {
   UserOutlined,
   WarningFilled,
 } from "@ant-design/icons";
-import { Dropdown, Popover } from "@saltbox/saltbox-frontend-common";
+import { Dropdown, Popover, notify } from "@saltbox/saltbox-frontend-common";
 import { Button, Descriptions, Flex, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -24,6 +24,15 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
     if (authStore) {
       authStore.signOut(window.location.href);
     }
+  };
+
+  const handleLocaleChange = (locale: string) => {
+    localeStore.setLocale(locale).catch(() => {
+      notify.error({
+        title: t("common:user-settings.language-save-failed-title"),
+        description: t("common:user-settings.language-save-failed-description"),
+      });
+    });
   };
 
   const profile = authStore?.user?.profile;
@@ -95,7 +104,7 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
                   key: locale,
                   label: locale.toUpperCase(),
                 })),
-                onClick: ({ key }) => localeStore.setLocale(key),
+                onClick: ({ key }) => handleLocaleChange(key),
               }}
             >
               <Flex align="center" justify="space-between" className={styles.languageRow}>
