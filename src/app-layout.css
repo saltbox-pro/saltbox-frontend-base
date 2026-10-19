@@ -47,6 +47,14 @@ body {
   padding-bottom: calc(var(--app-layout-gap) / 3) !important;
 }
 
+.ant-form-item-has-error .ant-upload-drag {
+  border-color: var(--ant-color-error, #ff4d4f);
+}
+
+.ant-form-item-has-error .ant-upload-drag:not(.ant-upload-disabled):hover {
+  border-color: var(--ant-color-error-border-hover, #ffa39e);
+}
+
 .ant-drawer .ant-drawer-body {
   padding: 15px 24px !important;
 }
