@@ -1,65 +1,87 @@
 import type { MenuProps } from "antd";
+import type { ReactNode } from "react";
 import { Link } from "react-router";
 
-import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
+import { resolveMenuLabel } from "../../../shared/lib/resolve-menu-label";
+import { type MenuIcon, MenuItemIcon } from "../../../shared/ui/menu-item-icon/menu-item-icon";
+import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
 
-export const generateMainMenuItems = (
-  config: any[],
-  toggleParcelDrawer: (content: any, menuKey: string) => void,
-  toggleSubmenuDrawer: (submenu: any[], menuKey: string) => void,
-  closeAllDrawers: () => void,
-  locale: string,
-  activeDrawerKey?: string | null
-): MenuProps["items"] => {
-  const items: MenuProps["items"] = [];
+interface GenerateMainMenuItemsParams {
+  config: any[];
+  locale: string;
+  activeDrawerKey: string | null;
+  isCollapsed: boolean;
+  toggleParcelDrawer: (content: any, menuKey: string) => void;
+  toggleSubmenuDrawer: (submenu: any[], menuKey: string) => void;
+  closeAllDrawers: () => void;
+}
+
+type MenuItems = NonNullable<MenuProps["items"]>;
+
+const getMenuItemIcon = (
+  icon: MenuIcon | undefined,
+  label: string,
+  isCollapsed: boolean
+): ReactNode => {
+  if (icon) {
+    return <MenuItemIcon icon={icon} />;
+  }
+
+  return isCollapsed ? <span>{label.charAt(0)}</span> : undefined;
+};
+
+export const generateMainMenuItems = ({
+  config,
+  locale,
+  activeDrawerKey,
+  isCollapsed,
+  toggleParcelDrawer,
+  toggleSubmenuDrawer,
+  closeAllDrawers,
+}: GenerateMainMenuItemsParams): MenuItems => {
+  const items: MenuItems = [];
+  const getOverlayClassName = (key: string) =>
+    activeDrawerKey === key ? SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS : undefined;
+
   config.forEach((item) => {
-    if (item.children) {
-      items.push({
-        type: "group",
-        key: item.key,
-        label: item.label,
-      });
+    if (!item.children) {
+      const label = resolveMenuLabel(item.label, locale);
 
-      item.children.forEach((child) => {
-        const elementLabel = typeof child.label === "object" ? child.label[locale] : child.label;
-
-        if (child.submenu) {
-          items.push({
-            key: child.key,
-            label: <MenuItemLabel icon={child.icon} label={elementLabel} />,
-            onClick: () => toggleSubmenuDrawer(child.submenu, child.key),
-            className: activeDrawerKey === child.key ? "drawer-active" : undefined,
-          });
-        } else {
-          items.push({
-            key: child.key,
-            label:
-              child.path && !child.drawer ? (
-                <Link to={child.path}>
-                  <MenuItemLabel icon={child.icon} label={elementLabel} />
-                </Link>
-              ) : (
-                <MenuItemLabel icon={child.icon} label={elementLabel} />
-              ),
-            onClick: child.drawer
-              ? () => toggleParcelDrawer(child.drawer, child.key)
-              : closeAllDrawers,
-            className: activeDrawerKey === child.key ? "drawer-active" : undefined,
-          });
-        }
-      });
-    } else {
       items.push({
         key: item.key,
-        label: item.path ? (
-          <Link to={item.path}>
-            <MenuItemLabel icon={item.icon} label={item.label} />
-          </Link>
-        ) : (
-          <MenuItemLabel icon={item.icon} label={item.label} />
-        ),
+        icon: getMenuItemIcon(item.icon, label, isCollapsed),
+        label: item.path ? <Link to={item.path}>{label}</Link> : label,
       });
+      return;
     }
+
+    if (item.children.length > 0 && items.length > 0) {
+      items.push({ type: "divider", key: `${item.key}-divider` });
+    }
+
+    item.children.forEach((child: any) => {
+      const label = resolveMenuLabel(child.label, locale);
+      const icon = getMenuItemIcon(child.icon, label, isCollapsed);
+
+      if (child.submenu) {
+        items.push({
+          key: child.key,
+          icon,
+          label,
+          onClick: () => toggleSubmenuDrawer(child.submenu, child.key),
+          className: getOverlayClassName(child.key),
+        });
+        return;
+      }
+
+      items.push({
+        key: child.key,
+        icon,
+        label: child.path && !child.drawer ? <Link to={child.path}>{label}</Link> : label,
+        onClick: child.drawer ? () => toggleParcelDrawer(child.drawer, child.key) : closeAllDrawers,
+        className: getOverlayClassName(child.key),
+      });
+    });
   });
 
   return items;

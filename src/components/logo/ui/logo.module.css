@@ -1,7 +1,9 @@
 .logoContainer {
   height: var(--app-header-height);
+  flex-shrink: 0;
   display: flex;
-  align-content: center;
+  align-items: center;
+  overflow: hidden;
   border-bottom: 1px solid var(--app-color-gray100);
   transition: background-color 0.15s ease;
 }
@@ -14,6 +16,20 @@
   display: block;
   width: 145px;
   height: auto;
-  margin: 0 20px;
+  margin-left: calc((var(--logo-mark-slot-width) - 145px * 51.374 / 291) / 2);
   flex-shrink: 0;
+  transform-origin: calc(145px * 25.687 / 291) 50%;
+  transition: transform 0.2s;
+}
+
+.logoCollapsed {
+  transform: scale(1.25);
+}
+
+.logoText {
+  transition: opacity 0.2s;
+}
+
+.logoTextHidden {
+  opacity: 0;
 }

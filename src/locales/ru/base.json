@@ -11,7 +11,9 @@
     "popover-user-fallback-name": "Пользователь",
     "popover-user-email-verified": "Email подтверждён",
     "popover-user-email-not-verified": "Email не подтверждён",
-    "popover-user-language-select": "Выбор языка"
+    "popover-user-language-select": "Выбор языка",
+    "collapse-button": "Свернуть меню",
+    "expand-button": "Развернуть меню"
   },
   "base": {
     "not-found": "Извините, страница, которую вы посетили, не существует.",

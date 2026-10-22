@@ -5,11 +5,17 @@ import {
   UserOutlined,
   WarningFilled,
 } from "@ant-design/icons";
-import { Dropdown, Popover, notify } from "@saltbox/saltbox-frontend-common";
-import { Button, Descriptions, Flex, Typography } from "antd";
+import { LocalizedLanguageSwitcher, Popover, notify } from "@saltbox/saltbox-frontend-common";
+import { Button, Descriptions, Flex, type MenuProps, Typography } from "antd";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
+import { SiderMenu } from "../../../shared/ui/sider-menu/sider-menu";
+
 import styles from "./menu-footer.module.css";
+
+type MenuClickInfo = Parameters<NonNullable<MenuProps["onClick"]>>[0];
 
 interface MenuFooterProps {
   authStore: any;
@@ -19,6 +25,7 @@ interface MenuFooterProps {
 
 export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFooterProps) {
   const { t } = useTranslation();
+  const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
 
   const handleLogout = () => {
     if (authStore) {
@@ -59,88 +66,89 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
     },
   ].filter(Boolean) as { key: string; label: string; children: string }[];
 
+  const handleUserItemClick = ({ domEvent }: MenuClickInfo) => {
+    closeAllDrawers();
+
+    if (domEvent.type === "keydown") {
+      setIsUserPopoverOpen((prev) => !prev);
+    }
+  };
+
+  const userMenuItems: MenuProps["items"] = [
+    {
+      key: "user",
+      icon: <UserOutlined />,
+      label: userDisplayName,
+      onClick: handleUserItemClick,
+      className: isUserPopoverOpen ? SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS : undefined,
+    },
+  ];
+
   return (
-    <Flex className={styles.menuFooter} vertical gap={4}>
-      <Popover
-        placement="rightBottom"
-        trigger="click"
-        content={
-          <div className={styles.popoverContent}>
-            <div className={styles.userHeader}>
-              <Typography.Text type="secondary" className={styles.loggedInAs}>
-                {t("mainmenu.popover-user-logged-in-as")}
-              </Typography.Text>
-              <Typography.Text strong className={styles.username}>
-                {username || userDisplayName}
-              </Typography.Text>
-            </div>
-
-            {descriptionItems.length > 0 && (
-              <Descriptions column={1} items={descriptionItems} className={styles.descriptions} />
-            )}
-
-            {emailVerified !== undefined && (
-              <Flex align="center" gap={6} className={styles.emailStatus}>
-                {emailVerified ? (
-                  <>
-                    <CheckCircleFilled className={styles.emailVerifiedIcon} />
-                    <Typography.Text>{t("mainmenu.popover-user-email-verified")}</Typography.Text>
-                  </>
-                ) : (
-                  <>
-                    <WarningFilled className={styles.emailNotVerifiedIcon} />
-                    <Typography.Text>
-                      {t("mainmenu.popover-user-email-not-verified")}
-                    </Typography.Text>
-                  </>
-                )}
-              </Flex>
-            )}
-
-            <Dropdown
-              trigger={["click"]}
-              menu={{
-                items: localeStore.supportedLocales.map((locale: string) => ({
-                  key: locale,
-                  label: locale.toUpperCase(),
-                })),
-                onClick: ({ key }) => handleLocaleChange(key),
-              }}
-            >
-              <Flex align="center" justify="space-between" className={styles.languageRow}>
-                <Flex align="center" gap={8}>
-                  <GlobalOutlined className={styles.languageRowIcon} />
-                  <Typography.Text>{t("mainmenu.popover-user-language-select")}</Typography.Text>
-                </Flex>
-                <Typography.Text type="secondary">
-                  {localeStore.currentLocale.toUpperCase()}
-                </Typography.Text>
-              </Flex>
-            </Dropdown>
-
-            <div className={styles.logoutRow}>
-              <Button
-                type="text"
-                icon={<LogoutOutlined className={styles.logoutRowIcon} />}
-                onClick={handleLogout}
-                className={styles.logoutRowButton}
-              >
-                {t("mainmenu.popover-user-logout-button")}
-              </Button>
-            </div>
+    <Popover
+      placement="rightBottom"
+      trigger="click"
+      open={isUserPopoverOpen}
+      onOpenChange={setIsUserPopoverOpen}
+      content={
+        <div className={styles.popoverContent}>
+          <div className={styles.userHeader}>
+            <Typography.Text type="secondary" className={styles.loggedInAs}>
+              {t("mainmenu.popover-user-logged-in-as")}
+            </Typography.Text>
+            <Typography.Text strong className={styles.username}>
+              {username || userDisplayName}
+            </Typography.Text>
           </div>
-        }
-      >
-        <Button
-          type="text"
-          icon={<UserOutlined />}
-          size="large"
-          className={styles.fullWidthButton}
-          onClick={closeAllDrawers}
-        >
-          {userDisplayName}
-        </Button>
-      </Popover>
-    </Flex>
+
+          {descriptionItems.length > 0 && (
+            <Descriptions column={1} items={descriptionItems} className={styles.descriptions} />
+          )}
+
+          {emailVerified !== undefined && (
+            <Flex align="center" gap={6} className={styles.emailStatus}>
+              {emailVerified ? (
+                <>
+                  <CheckCircleFilled className={styles.emailVerifiedIcon} />
+                  <Typography.Text>{t("mainmenu.popover-user-email-verified")}</Typography.Text>
+                </>
+              ) : (
+                <>
+                  <WarningFilled className={styles.emailNotVerifiedIcon} />
+                  <Typography.Text>{t("mainmenu.popover-user-email-not-verified")}</Typography.Text>
+                </>
+              )}
+            </Flex>
+          )}
+
+          <Flex align="center" justify="space-between" className={styles.languageRow}>
+            <Flex align="center" gap={8}>
+              <GlobalOutlined className={styles.languageRowIcon} />
+              <Typography.Text>{t("mainmenu.popover-user-language-select")}</Typography.Text>
+            </Flex>
+            <LocalizedLanguageSwitcher
+              value={localeStore.currentLocale}
+              languages={localeStore.supportedLocales}
+              onChange={handleLocaleChange}
+            />
+          </Flex>
+
+          <div className={styles.logoutRow}>
+            <Button
+              type="text"
+              icon={<LogoutOutlined className={styles.logoutRowIcon} />}
+              onClick={handleLogout}
+              className={styles.logoutRowButton}
+            >
+              {t("mainmenu.popover-user-logout-button")}
+            </Button>
+          </div>
+        </div>
+      }
+    >
+      <div>
+        <SiderMenu items={userMenuItems} />
+      </div>
+    </Popover>
   );
 }

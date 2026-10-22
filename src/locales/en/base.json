@@ -11,7 +11,9 @@
     "popover-user-fallback-name": "User",
     "popover-user-email-verified": "Email verified",
     "popover-user-email-not-verified": "Email not verified",
-    "popover-user-language-select": "Language"
+    "popover-user-language-select": "Language",
+    "collapse-button": "Collapse menu",
+    "expand-button": "Expand menu"
   },
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",

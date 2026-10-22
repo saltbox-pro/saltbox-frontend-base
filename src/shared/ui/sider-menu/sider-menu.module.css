@@ -1,0 +1,21 @@
+.menu:global(.ant-menu-inline-collapsed) {
+  width: 100%;
+}
+
+.menu:global(.ant-menu-inline-collapsed) :global(.ant-menu-item) {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--sider-menu-collapsed-item-padding);
+}
+
+.menu:global(.ant-menu-inline-collapsed) :global(.ant-menu-item > *) {
+  flex: none;
+}
+
+.menu:global(.ant-menu.ant-menu-root) :global(.ant-menu-item) {
+  transition: var(--sider-menu-item-transition);
+}
+
+.menu :global(.ant-menu-item.is-overlay-open) {
+  background-color: rgba(0, 0, 0, 0.06);
+}

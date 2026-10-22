@@ -1,12 +1,10 @@
 import type { MenuProps } from "antd";
 import { Link } from "react-router";
 
+import { resolveMenuLabel } from "../../../shared/lib/resolve-menu-label";
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
 
 const externalHrefProps = { target: "_blank", rel: "noopener noreferrer" } as const;
-
-const resolveLabel = (label: string | Record<string, string>, locale: string): string =>
-  typeof label === "object" ? label[locale] : label;
 
 export const generateSettingsMenuItems = (
   config: any[],
@@ -20,18 +18,18 @@ export const generateSettingsMenuItems = (
       items.push({
         type: "group",
         key: item.key,
-        label: resolveLabel(item.label, locale),
+        label: resolveMenuLabel(item.label, locale),
       });
 
       item.children.forEach((child) => {
-        const elementLabel = resolveLabel(child.label, locale);
+        const elementLabel = resolveMenuLabel(child.label, locale);
 
         if (child.submenu) {
           items.push({
             key: child.key,
             label: <MenuItemLabel icon={child.icon} label={elementLabel} />,
             children: child.submenu.map((sub: any) => {
-              const subLabel = resolveLabel(sub.label, locale);
+              const subLabel = resolveMenuLabel(sub.label, locale);
               const subLink = sub.href ? (
                 <a href={sub.href} {...externalHrefProps} onClick={() => closeDrawer()}>
                   <MenuItemLabel icon={sub.icon} label={subLabel} />

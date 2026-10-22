@@ -32,7 +32,7 @@ export function BaseDrawer({
         wrapper: {
           minWidth,
           width: "auto",
-          maxWidth: "calc(100vw - 250px)",
+          maxWidth: "100%",
         },
       }}
     >

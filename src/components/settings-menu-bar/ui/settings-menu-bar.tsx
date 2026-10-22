@@ -1,11 +1,11 @@
 import { SettingOutlined } from "@ant-design/icons";
-import { Flex } from "antd";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
-import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
+import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
+import { SiderMenu } from "../../../shared/ui/sider-menu/sider-menu";
 
 import styles from "./settings-menu-bar.module.css";
 
@@ -36,19 +36,15 @@ export function SettingsMenuBar({
         icon: <SettingOutlined />,
         label: t("mainmenu.settings-button"),
         onClick: toggleSettingsDrawer,
-        className: isSettingsDrawerOpen ? "drawer-active" : undefined,
+        className: isSettingsDrawerOpen ? SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS : undefined,
       },
     ],
     [t, toggleSettingsDrawer, isSettingsDrawerOpen]
   );
 
   return (
-    <Flex className={styles.container} gap="small" align="center">
-      <BaseMenu
-        className={styles.menu}
-        selectedKeys={isSettingsActive ? ["settings"] : []}
-        items={items}
-      />
-    </Flex>
+    <div className={styles.container}>
+      <SiderMenu selectedKeys={isSettingsActive ? ["settings"] : []} items={items} />
+    </div>
   );
 }

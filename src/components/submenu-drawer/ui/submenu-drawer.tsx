@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link, useLocation } from "react-router";
 
 import { getActiveSubmenuKeys } from "../../../shared/lib/get-active-menu-keys";
+import { resolveMenuLabel } from "../../../shared/lib/resolve-menu-label";
 import { BaseDrawer } from "../../../shared/ui/base-drawer/base-drawer";
 import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
@@ -28,7 +29,7 @@ export function SubmenuDrawer({
   const items = useMemo(
     () =>
       submenuItems?.map((sub: any) => {
-        const subLabel = typeof sub.label === "object" ? sub.label[locale] : sub.label;
+        const subLabel = resolveMenuLabel(sub.label, locale);
         return {
           key: sub.key,
           label: (

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLocation } from "react-router";
 
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
-import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
+import { SiderMenu } from "../../../shared/ui/sider-menu/sider-menu";
 import { generateMainMenuItems } from "../lib/generate-main-menu-items";
 
 import styles from "./main-menu.module.css";
@@ -14,6 +14,7 @@ interface MainMenuProps {
   closeAllDrawers: () => void;
   locale: string;
   activeDrawerKey: string | null;
+  isCollapsed: boolean;
 }
 
 export function MainMenu({
@@ -23,6 +24,7 @@ export function MainMenu({
   closeAllDrawers,
   locale,
   activeDrawerKey,
+  isCollapsed,
 }: MainMenuProps) {
   const location = useLocation();
   const { selectedKeys, openKeys } = useMemo(
@@ -32,19 +34,28 @@ export function MainMenu({
 
   const items = useMemo(
     () =>
-      generateMainMenuItems(
-        menu,
+      generateMainMenuItems({
+        config: menu,
+        locale,
+        activeDrawerKey,
+        isCollapsed,
         toggleParcelDrawer,
         toggleSubmenuDrawer,
         closeAllDrawers,
-        locale,
-        activeDrawerKey
-      ),
-    [menu, toggleParcelDrawer, toggleSubmenuDrawer, closeAllDrawers, locale, activeDrawerKey]
+      }),
+    [
+      menu,
+      toggleParcelDrawer,
+      toggleSubmenuDrawer,
+      closeAllDrawers,
+      locale,
+      activeDrawerKey,
+      isCollapsed,
+    ]
   );
 
   return (
-    <BaseMenu
+    <SiderMenu
       className={styles.menu}
       selectedKeys={selectedKeys}
       openKeys={openKeys}
