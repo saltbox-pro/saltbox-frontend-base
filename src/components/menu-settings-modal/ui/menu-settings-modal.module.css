@@ -1,0 +1,124 @@
+.groups,
+.items {
+  list-style: none;
+}
+
+.description {
+  margin-bottom: 12px;
+}
+
+.groups {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.group {
+  position: relative;
+}
+
+.group + .group {
+  margin-top: 4px;
+}
+
+.items {
+  padding-left: 24px;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-right: 8px;
+  border-radius: var(--ant-border-radius, 6px);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row :global(.ant-checkbox-wrapper) {
+  flex: 1;
+  align-self: stretch;
+  align-items: center;
+  min-width: 0;
+  padding: 4px 0 4px 8px;
+}
+
+.row:hover {
+  background-color: var(--ant-color-bg-text-hover, rgba(0, 0, 0, 0.06));
+}
+
+.groupLabel {
+  font-weight: 500;
+}
+
+.handle {
+  color: var(--ant-color-text-tertiary, #8c8c8c);
+  user-select: none;
+}
+
+.handle[tabindex] {
+  cursor: grab;
+}
+
+.handle[tabindex]:active {
+  cursor: grabbing;
+}
+
+.handle:focus-visible {
+  outline: 2px solid var(--ant-color-primary, #1677ff);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.handleDisabled[tabindex] {
+  cursor: default;
+}
+
+.handleDisabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.dragging {
+  opacity: 0.45;
+}
+
+.dropBefore::before,
+.dropAfter::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--ant-color-primary, #1677ff);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dropBefore::before {
+  top: 0;
+}
+
+.dropAfter::after {
+  bottom: 0;
+}
+
+.skeletonRow {
+  height: 32px;
+  padding-inline: 8px;
+}
+
+.skeletonRow + .skeletonRow {
+  margin-top: 4px;
+}
+
+.skeletonItem {
+  margin-left: 24px;
+}
+
+.error {
+  margin-top: 12px;
+}
+
+.footer {
+  margin-top: 16px;
+}

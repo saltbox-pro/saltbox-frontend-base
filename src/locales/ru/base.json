@@ -1,6 +1,6 @@
 {
   "mainmenu": {
-    "settings-button": "Настройки",
+    "more-button": "Дополнительно",
     "popover-user-info-username": "Имя пользователя",
     "popover-user-info-email": "Электронная почта",
     "popover-user-info-first-name": "Имя",
@@ -13,7 +13,19 @@
     "popover-user-email-not-verified": "Email не подтверждён",
     "popover-user-language-select": "Выбор языка",
     "collapse-button": "Свернуть меню",
-    "expand-button": "Развернуть меню"
+    "expand-button": "Развернуть меню",
+    "menu-settings-button": "Настройка меню"
+  },
+  "menu-settings": {
+    "title": "Настройка меню",
+    "description": "Отметьте пункты, которые нужно показывать в боковом меню. Остальные будут доступны в разделе \"Дополнительно\"",
+    "reset-button": "Сбросить",
+    "cancel-button": "Отмена",
+    "save-button": "Сохранить",
+    "load-error": "Не удалось загрузить настройки меню. Попробуйте позже",
+    "retry-button": "Повторить",
+    "save-error": "Не удалось сохранить настройки меню. Попробуйте ещё раз",
+    "drag-handle": "Переместить \"{{label}}\" (Alt+↑/↓)"
   },
   "base": {
     "not-found": "Извините, страница, которую вы посетили, не существует.",

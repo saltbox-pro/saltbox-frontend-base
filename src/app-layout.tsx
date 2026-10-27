@@ -6,22 +6,24 @@ import { useLocation } from "react-router";
 import "./app-layout.css";
 import styles from "./app-layout.module.css";
 import { Logo } from "./components/logo";
-import { MainMenu } from "./components/main-menu";
+import { MainMenu, MainMenuSkeleton } from "./components/main-menu";
 import { MenuFooter } from "./components/menu-footer";
+import { MenuSettingsModal } from "./components/menu-settings-modal";
+import { MoreDrawer } from "./components/more-drawer";
 import { ParcelDrawer } from "./components/parcel-drawer";
-import { SettingsDrawer } from "./components/settings-drawer";
-import { SettingsMenuBar } from "./components/settings-menu-bar";
-import { SiderCollapseToggle } from "./components/sider-collapse-toggle";
+import { SidebarActions } from "./components/sidebar-actions";
 import { SubmenuDrawer } from "./components/submenu-drawer";
 import { SIDER_COLLAPSED_WIDTH, SIDER_WIDTH } from "./shared/config/sider";
 import { useSiderCollapsed } from "./shared/lib/use-sider-collapsed";
+import type { AppMenuStore } from "./shared/model/menu";
+import { getSidebarMenus } from "./shared/model/sidebar-menus";
 import { ModuleAccessError } from "./shared/ui/module-access-error/module-access-error";
 
 const { Sider, Content } = Layout;
 
 interface AppLayoutProps {
   authStore: any;
-  menuStore: any;
+  menuStore: AppMenuStore;
   localeStore: any;
 }
 
@@ -34,7 +36,8 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
   const [submenuDrawerContent, setSubmenuDrawerContent] = useState<any[] | null>(null);
   const [activeSubmenuKey, setActiveSubmenuKey] = useState<string | null>(null);
   const [isSubmenuDrawerOpen, setIsSubmenuDrawerOpen] = useState(false);
-  const [isSettingsDrawerOpen, setIsSettingsDrawerOpen] = useState(false);
+  const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
+  const [isMenuSettingsOpen, setIsMenuSettingsOpen] = useState(false);
   const { isCollapsed, toggleCollapsed } = useSiderCollapsed();
 
   useEffect(() => {
@@ -70,15 +73,15 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     setIsSubmenuDrawerOpen(false);
   }, []);
 
-  const closeSettingsDrawer = useCallback(() => {
-    setIsSettingsDrawerOpen(false);
+  const closeMoreDrawer = useCallback(() => {
+    setIsMoreDrawerOpen(false);
   }, []);
 
   const closeAllDrawers = useCallback(() => {
     closeParcelDrawer();
     closeSubmenuDrawer();
-    closeSettingsDrawer();
-  }, [closeParcelDrawer, closeSubmenuDrawer, closeSettingsDrawer]);
+    closeMoreDrawer();
+  }, [closeParcelDrawer, closeSubmenuDrawer, closeMoreDrawer]);
 
   const toggleParcelDrawer = useCallback(
     (content: any, menuKey: string) => {
@@ -87,18 +90,12 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
         return;
       }
 
-      closeSettingsDrawer();
+      closeMoreDrawer();
       closeSubmenuDrawer();
       setParcelDrawerContent(content);
       setActiveParcelKey(menuKey);
     },
-    [
-      parcelDrawerContent,
-      activeParcelKey,
-      closeParcelDrawer,
-      closeSettingsDrawer,
-      closeSubmenuDrawer,
-    ]
+    [parcelDrawerContent, activeParcelKey, closeParcelDrawer, closeMoreDrawer, closeSubmenuDrawer]
   );
 
   const toggleSubmenuDrawer = useCallback(
@@ -108,19 +105,13 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
         return;
       }
 
-      closeSettingsDrawer();
+      closeMoreDrawer();
       closeParcelDrawer();
       setSubmenuDrawerContent(submenu);
       setActiveSubmenuKey(menuKey);
       setIsSubmenuDrawerOpen(true);
     },
-    [
-      isSubmenuDrawerOpen,
-      activeSubmenuKey,
-      closeSubmenuDrawer,
-      closeSettingsDrawer,
-      closeParcelDrawer,
-    ]
+    [isSubmenuDrawerOpen, activeSubmenuKey, closeSubmenuDrawer, closeMoreDrawer, closeParcelDrawer]
   );
 
   const handleSubmenuDrawerAfterOpenChange = (open: boolean) => {
@@ -130,18 +121,29 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
     }
   };
 
-  const toggleSettingsDrawer = useCallback(() => {
-    if (isSettingsDrawerOpen) {
-      closeSettingsDrawer();
+  const toggleMoreDrawer = useCallback(() => {
+    if (isMoreDrawerOpen) {
+      closeMoreDrawer();
       return;
     }
 
     closeParcelDrawer();
     closeSubmenuDrawer();
-    setIsSettingsDrawerOpen(true);
-  }, [isSettingsDrawerOpen, closeSettingsDrawer, closeParcelDrawer, closeSubmenuDrawer]);
+    setIsMoreDrawerOpen(true);
+  }, [isMoreDrawerOpen, closeMoreDrawer, closeParcelDrawer, closeSubmenuDrawer]);
 
-  const isModulesLoading = menuStore.isModulesLoading ?? false;
+  const openMenuSettings = useCallback(() => {
+    closeAllDrawers();
+    setIsMenuSettingsOpen(true);
+  }, [closeAllDrawers]);
+
+  const handleCloseMenuSettings = () => {
+    setIsMenuSettingsOpen(false);
+  };
+
+  const locale = localeStore.currentLocale;
+  const { layoutStore, mainMenu, moreMenu, hasMoreMenu, isModulesLoading, isLayoutResolved } =
+    getSidebarMenus(menuStore);
   const isAvailableModulePath = menuStore.isAvailableModulePath?.(location.pathname) ?? true;
   const isFullBleed = menuStore.isFullBleedModulePath?.(location.pathname) ?? false;
   const shouldShowLoading = location.pathname !== "/" && isModulesLoading;
@@ -161,21 +163,28 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
           <Flex className={styles.siderContent} vertical>
             <Logo onClick={closeAllDrawers} isCollapsed={isCollapsed} />
 
-            <MainMenu
-              menu={menuStore.sortedMenu}
-              toggleParcelDrawer={toggleParcelDrawer}
-              toggleSubmenuDrawer={toggleSubmenuDrawer}
-              closeAllDrawers={closeAllDrawers}
-              locale={localeStore.currentLocale}
-              activeDrawerKey={activeSubmenuKey || activeParcelKey}
-              isCollapsed={isCollapsed}
-            />
-
-            <SettingsMenuBar
-              settingsMenu={menuStore.sortedSettingsMenu}
-              isSettingsDrawerOpen={isSettingsDrawerOpen}
-              toggleSettingsDrawer={toggleSettingsDrawer}
-            />
+            {isLayoutResolved ? (
+              <MainMenu
+                menu={mainMenu}
+                more={
+                  hasMoreMenu
+                    ? {
+                        entries: moreMenu,
+                        isOpen: isMoreDrawerOpen,
+                        onToggle: toggleMoreDrawer,
+                      }
+                    : null
+                }
+                toggleParcelDrawer={toggleParcelDrawer}
+                toggleSubmenuDrawer={toggleSubmenuDrawer}
+                closeAllDrawers={closeAllDrawers}
+                locale={locale}
+                activeDrawerKey={activeSubmenuKey || activeParcelKey}
+                isCollapsed={isCollapsed}
+              />
+            ) : (
+              <MainMenuSkeleton isCollapsed={isCollapsed} />
+            )}
 
             <MenuFooter
               authStore={authStore}
@@ -183,16 +192,31 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
               closeAllDrawers={closeAllDrawers}
             />
 
-            <SiderCollapseToggle isCollapsed={isCollapsed} onToggle={toggleCollapsed} />
+            <SidebarActions
+              isCollapsed={isCollapsed}
+              onToggleCollapsed={toggleCollapsed}
+              onOpenMenuSettings={layoutStore ? openMenuSettings : undefined}
+            />
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
-          <SettingsDrawer
-            isOpen={isSettingsDrawerOpen}
-            onClose={closeSettingsDrawer}
-            settingsMenu={menuStore.sortedSettingsMenu}
-            locale={localeStore.currentLocale}
+          <MoreDrawer
+            isOpen={isMoreDrawerOpen}
+            onClose={closeMoreDrawer}
+            moreMenu={moreMenu}
+            isLoading={isModulesLoading}
+            locale={locale}
+            toggleParcelDrawer={toggleParcelDrawer}
           />
+
+          {layoutStore && (
+            <MenuSettingsModal
+              isOpen={isMenuSettingsOpen}
+              onClose={handleCloseMenuSettings}
+              menuStore={layoutStore}
+              locale={locale}
+            />
+          )}
 
           <ParcelDrawer
             isOpen={!!parcelDrawerContent}
@@ -205,7 +229,7 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
             onClose={closeSubmenuDrawer}
             afterOpenChange={handleSubmenuDrawerAfterOpenChange}
             submenuItems={submenuDrawerContent}
-            locale={localeStore.currentLocale}
+            locale={locale}
             onItemClick={closeAllDrawers}
           />
 
@@ -218,12 +242,12 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
               className={styles.appContainer}
               style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
             ></div>
-            {shouldShowLoading ? (
+            {shouldShowLoading && (
               <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
                 <Spin size="large" />
               </Flex>
-            ) : null}
-            {shouldShowModuleError ? <ModuleAccessError /> : null}
+            )}
+            {shouldShowModuleError && <ModuleAccessError />}
           </Content>
         </Layout>
       </Layout>

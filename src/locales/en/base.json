@@ -1,6 +1,6 @@
 {
   "mainmenu": {
-    "settings-button": "Settings",
+    "more-button": "More",
     "popover-user-info-username": "Username",
     "popover-user-info-email": "Email",
     "popover-user-info-first-name": "First Name",
@@ -13,7 +13,19 @@
     "popover-user-email-not-verified": "Email not verified",
     "popover-user-language-select": "Language",
     "collapse-button": "Collapse menu",
-    "expand-button": "Expand menu"
+    "expand-button": "Expand menu",
+    "menu-settings-button": "Menu settings"
+  },
+  "menu-settings": {
+    "title": "Menu settings",
+    "description": "Select the items to show in the sidebar. The rest will be available under \"More\"",
+    "reset-button": "Reset",
+    "cancel-button": "Cancel",
+    "save-button": "Save",
+    "load-error": "Failed to load menu settings. Please try again later",
+    "retry-button": "Retry",
+    "save-error": "Failed to save menu settings. Please try again",
+    "drag-handle": "Move \"{{label}}\" (Alt+↑/↓)"
   },
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",

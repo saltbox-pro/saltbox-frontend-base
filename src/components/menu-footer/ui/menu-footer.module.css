@@ -1,3 +1,7 @@
+.container {
+  border-top: 1px solid var(--app-color-gray100);
+}
+
 .popoverContent {
   min-width: 300px;
   max-width: 450px;

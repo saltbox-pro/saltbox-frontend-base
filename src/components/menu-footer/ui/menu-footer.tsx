@@ -146,7 +146,7 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
         </div>
       }
     >
-      <div>
+      <div className={styles.container}>
         <SiderMenu items={userMenuItems} />
       </div>
     </Popover>

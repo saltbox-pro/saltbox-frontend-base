@@ -1,0 +1,16 @@
+.skeleton {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skeletonRow {
+  height: 40px;
+  margin-block: 4px;
+  padding-inline: 16px;
+}
+
+.skeletonGroup {
+  height: 32px;
+  padding-inline-end: 50%;
+}
