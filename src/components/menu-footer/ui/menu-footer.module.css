@@ -11,9 +11,6 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ant-color-split, #f0f0f0);
-  margin-bottom: 12px;
 }
 
 .loggedInAs {
@@ -26,7 +23,6 @@
 
 .descriptions {
   padding: 0 4px;
-  margin-bottom: 8px;
 }
 
 .descriptions :global(.ant-descriptions-view),
@@ -39,9 +35,7 @@
 }
 
 .emailStatus {
-  padding: 6px 4px 12px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--ant-color-split, #f0f0f0);
+  padding: 6px 4px;
 }
 
 .emailVerifiedIcon {
@@ -52,28 +46,25 @@
   color: var(--ant-color-warning, #faad14);
 }
 
-.languageRow {
-  padding: 8px 4px;
-  margin-bottom: 4px;
-}
-
-.languageRowIcon {
-  color: var(--ant-color-text-tertiary, #8c8c8c);
-}
-
-.logoutRow {
-  border-top: 1px solid var(--ant-color-split, #f0f0f0);
-  padding-top: 4px;
-}
-
-.logoutRowIcon {
-  color: var(--ant-color-error, #ff4d4f);
-}
-
-.logoutRowButton {
+.actionRow {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   width: 100%;
   padding: 8px 4px;
+}
+
+.actionRowButton {
+  justify-content: flex-start;
+}
+
+.actionRowIcon {
+  color: var(--ant-color-text-tertiary, #8c8c8c);
+}
+
+.logoutIcon {
+  color: var(--ant-color-error, #ff4d4f);
+}
+
+.divider {
+  margin: 8px 0;
 }

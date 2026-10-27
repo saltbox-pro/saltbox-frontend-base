@@ -1,15 +1,17 @@
 import {
   CheckCircleFilled,
+  ControlOutlined,
   GlobalOutlined,
   LogoutOutlined,
   UserOutlined,
   WarningFilled,
 } from "@ant-design/icons";
 import { LocalizedLanguageSwitcher, Popover, notify } from "@saltbox/saltbox-frontend-common";
-import { Button, Descriptions, Flex, type MenuProps, Typography } from "antd";
+import { Button, Descriptions, Divider, Flex, type MenuProps, Typography } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { cn } from "../../../shared/lib/cn";
 import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
 import { SiderMenu } from "../../../shared/ui/sider-menu/sider-menu";
 
@@ -21,9 +23,15 @@ interface MenuFooterProps {
   authStore: any;
   localeStore: any;
   closeAllDrawers: () => void;
+  onOpenMenuSettings?: () => void;
 }
 
-export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFooterProps) {
+export function MenuFooter({
+  authStore,
+  localeStore,
+  closeAllDrawers,
+  onOpenMenuSettings,
+}: MenuFooterProps) {
   const { t } = useTranslation();
   const [isUserPopoverOpen, setIsUserPopoverOpen] = useState(false);
 
@@ -101,6 +109,8 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
             </Typography.Text>
           </div>
 
+          <Divider className={styles.divider} />
+
           {descriptionItems.length > 0 && (
             <Descriptions column={1} items={descriptionItems} className={styles.descriptions} />
           )}
@@ -121,9 +131,13 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
             </Flex>
           )}
 
-          <Flex align="center" justify="space-between" className={styles.languageRow}>
+          {(descriptionItems.length > 0 || emailVerified !== undefined) && (
+            <Divider className={styles.divider} />
+          )}
+
+          <Flex align="center" justify="space-between" className={styles.actionRow}>
             <Flex align="center" gap={8}>
-              <GlobalOutlined className={styles.languageRowIcon} />
+              <GlobalOutlined className={styles.actionRowIcon} />
               <Typography.Text>{t("mainmenu.popover-user-language-select")}</Typography.Text>
             </Flex>
             <LocalizedLanguageSwitcher
@@ -133,16 +147,30 @@ export function MenuFooter({ authStore, localeStore, closeAllDrawers }: MenuFoot
             />
           </Flex>
 
-          <div className={styles.logoutRow}>
+          {!!onOpenMenuSettings && (
             <Button
               type="text"
-              icon={<LogoutOutlined className={styles.logoutRowIcon} />}
-              onClick={handleLogout}
-              className={styles.logoutRowButton}
+              icon={<ControlOutlined className={styles.actionRowIcon} />}
+              onClick={() => {
+                setIsUserPopoverOpen(false);
+                onOpenMenuSettings();
+              }}
+              className={cn(styles.actionRow, styles.actionRowButton)}
             >
-              {t("mainmenu.popover-user-logout-button")}
+              {t("mainmenu.menu-settings-button")}
             </Button>
-          </div>
+          )}
+
+          <Divider className={styles.divider} />
+
+          <Button
+            type="text"
+            icon={<LogoutOutlined className={styles.logoutIcon} />}
+            onClick={handleLogout}
+            className={cn(styles.actionRow, styles.actionRowButton)}
+          >
+            {t("mainmenu.popover-user-logout-button")}
+          </Button>
         </div>
       }
     >

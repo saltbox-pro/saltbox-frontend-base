@@ -190,13 +190,10 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
               authStore={authStore}
               localeStore={localeStore}
               closeAllDrawers={closeAllDrawers}
-            />
-
-            <SidebarActions
-              isCollapsed={isCollapsed}
-              onToggleCollapsed={toggleCollapsed}
               onOpenMenuSettings={layoutStore ? openMenuSettings : undefined}
             />
+
+            <SidebarActions isCollapsed={isCollapsed} onToggleCollapsed={toggleCollapsed} />
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
