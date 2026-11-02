@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLocation } from "react-router";
 
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
-import type { MenuEntry } from "../../../shared/model/menu";
+import type { MenuEntry, ToggleParcelDrawer } from "../../../shared/model/menu";
 import { BaseDrawer } from "../../../shared/ui/base-drawer/base-drawer";
 import { BaseMenu } from "../../../shared/ui/base-menu/base-menu";
 import { generateMoreMenuItems } from "../lib/generate-more-menu-items";
@@ -16,7 +16,7 @@ interface MoreDrawerProps {
   moreMenu: MenuEntry[];
   isLoading: boolean;
   locale: string;
-  toggleParcelDrawer: (content: unknown, menuKey: string) => void;
+  toggleParcelDrawer: ToggleParcelDrawer;
 }
 
 export function MoreDrawer({

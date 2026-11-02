@@ -1,7 +1,7 @@
 import type { MenuProps } from "antd";
 
 import { resolveMenuLabel } from "../../../shared/lib/resolve-menu-label";
-import type { MenuEntry } from "../../../shared/model/menu";
+import type { MenuEntry, ToggleParcelDrawer } from "../../../shared/model/menu";
 import { renderMenuEntryLink } from "../../../shared/ui/menu-entry-link/render-menu-entry-link";
 import { MenuItemLabel } from "../../../shared/ui/menu-item-label/menu-item-label";
 
@@ -11,7 +11,7 @@ interface GenerateMoreMenuItemsParams {
   config: MenuEntry[];
   locale: string;
   closeDrawer: () => void;
-  toggleParcelDrawer: (content: unknown, menuKey: string) => void;
+  toggleParcelDrawer: ToggleParcelDrawer;
 }
 
 export const generateMoreMenuItems = ({
@@ -39,7 +39,14 @@ export const generateMoreMenuItems = ({
     return {
       key: entry.key,
       label: renderLabel(entry),
-      onClick: entry.drawer ? () => toggleParcelDrawer(entry.drawer, entry.key) : undefined,
+      onClick: entry.drawer
+        ? () =>
+            toggleParcelDrawer({
+              key: entry.key,
+              title: resolveMenuLabel(entry.label, locale),
+              config: entry.drawer,
+            })
+        : undefined,
     };
   };
 

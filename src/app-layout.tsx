@@ -14,6 +14,8 @@ import { ParcelDrawer } from "./components/parcel-drawer";
 import { SidebarActions } from "./components/sidebar-actions";
 import { SubmenuDrawer } from "./components/submenu-drawer";
 import { SIDER_COLLAPSED_WIDTH, SIDER_WIDTH } from "./shared/config/sider";
+import { useLayoutDrawers } from "./shared/lib/use-layout-drawers";
+import { useSiderAutoCollapse } from "./shared/lib/use-sider-auto-collapse";
 import { useSiderCollapsed } from "./shared/lib/use-sider-collapsed";
 import type { AppMenuStore } from "./shared/model/menu";
 import { getSidebarMenus } from "./shared/model/sidebar-menus";
@@ -31,14 +33,15 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [parcelDrawerContent, setParcelDrawerContent] = useState<any>();
-  const [activeParcelKey, setActiveParcelKey] = useState<string | null>(null);
-  const [submenuDrawerContent, setSubmenuDrawerContent] = useState<any[] | null>(null);
-  const [activeSubmenuKey, setActiveSubmenuKey] = useState<string | null>(null);
-  const [isSubmenuDrawerOpen, setIsSubmenuDrawerOpen] = useState(false);
-  const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
   const [isMenuSettingsOpen, setIsMenuSettingsOpen] = useState(false);
-  const { isCollapsed, toggleCollapsed } = useSiderCollapsed();
+  const siderCollapsedByUser = useSiderCollapsed();
+  const { isCollapsed, toggleCollapsed, autoCollapse, releaseAutoCollapse } =
+    useSiderAutoCollapse(siderCollapsedByUser);
+  const { activeDrawerKey, closeAllDrawers, parcelDrawer, submenuDrawer, moreDrawer } =
+    useLayoutDrawers({
+      autoCollapseSider: autoCollapse,
+      releaseSiderAutoCollapse: releaseAutoCollapse,
+    });
 
   useEffect(() => {
     if (containerRef.current) {
@@ -63,74 +66,6 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
       window.dispatchEvent(event);
     };
   }, []);
-
-  const closeParcelDrawer = useCallback(() => {
-    setParcelDrawerContent(undefined);
-    setActiveParcelKey(null);
-  }, []);
-
-  const closeSubmenuDrawer = useCallback(() => {
-    setIsSubmenuDrawerOpen(false);
-  }, []);
-
-  const closeMoreDrawer = useCallback(() => {
-    setIsMoreDrawerOpen(false);
-  }, []);
-
-  const closeAllDrawers = useCallback(() => {
-    closeParcelDrawer();
-    closeSubmenuDrawer();
-    closeMoreDrawer();
-  }, [closeParcelDrawer, closeSubmenuDrawer, closeMoreDrawer]);
-
-  const toggleParcelDrawer = useCallback(
-    (content: any, menuKey: string) => {
-      if (parcelDrawerContent && activeParcelKey === menuKey) {
-        closeParcelDrawer();
-        return;
-      }
-
-      closeMoreDrawer();
-      closeSubmenuDrawer();
-      setParcelDrawerContent(content);
-      setActiveParcelKey(menuKey);
-    },
-    [parcelDrawerContent, activeParcelKey, closeParcelDrawer, closeMoreDrawer, closeSubmenuDrawer]
-  );
-
-  const toggleSubmenuDrawer = useCallback(
-    (submenu: any[], menuKey: string) => {
-      if (isSubmenuDrawerOpen && activeSubmenuKey === menuKey) {
-        closeSubmenuDrawer();
-        return;
-      }
-
-      closeMoreDrawer();
-      closeParcelDrawer();
-      setSubmenuDrawerContent(submenu);
-      setActiveSubmenuKey(menuKey);
-      setIsSubmenuDrawerOpen(true);
-    },
-    [isSubmenuDrawerOpen, activeSubmenuKey, closeSubmenuDrawer, closeMoreDrawer, closeParcelDrawer]
-  );
-
-  const handleSubmenuDrawerAfterOpenChange = (open: boolean) => {
-    if (!open) {
-      setSubmenuDrawerContent(null);
-      setActiveSubmenuKey(null);
-    }
-  };
-
-  const toggleMoreDrawer = useCallback(() => {
-    if (isMoreDrawerOpen) {
-      closeMoreDrawer();
-      return;
-    }
-
-    closeParcelDrawer();
-    closeSubmenuDrawer();
-    setIsMoreDrawerOpen(true);
-  }, [isMoreDrawerOpen, closeMoreDrawer, closeParcelDrawer, closeSubmenuDrawer]);
 
   const openMenuSettings = useCallback(() => {
     closeAllDrawers();
@@ -170,16 +105,16 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
                   hasMoreMenu
                     ? {
                         entries: moreMenu,
-                        isOpen: isMoreDrawerOpen,
-                        onToggle: toggleMoreDrawer,
+                        isOpen: moreDrawer.isOpen,
+                        onToggle: moreDrawer.toggle,
                       }
                     : null
                 }
-                toggleParcelDrawer={toggleParcelDrawer}
-                toggleSubmenuDrawer={toggleSubmenuDrawer}
+                toggleParcelDrawer={parcelDrawer.toggle}
+                toggleSubmenuDrawer={submenuDrawer.toggle}
                 closeAllDrawers={closeAllDrawers}
                 locale={locale}
-                activeDrawerKey={activeSubmenuKey || activeParcelKey}
+                activeDrawerKey={activeDrawerKey}
                 isCollapsed={isCollapsed}
               />
             ) : (
@@ -197,13 +132,23 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
+          <ParcelDrawer
+            isOpen={parcelDrawer.isOpen}
+            request={parcelDrawer.request}
+            pinnedWidth={parcelDrawer.pinnedWidth}
+            panelRef={parcelDrawer.panelRef}
+            onClose={parcelDrawer.close}
+            onTogglePin={parcelDrawer.togglePin}
+            afterOpenChange={parcelDrawer.handleAfterOpenChange}
+          />
+
           <MoreDrawer
-            isOpen={isMoreDrawerOpen}
-            onClose={closeMoreDrawer}
+            isOpen={moreDrawer.isOpen}
+            onClose={moreDrawer.close}
             moreMenu={moreMenu}
             isLoading={isModulesLoading}
             locale={locale}
-            toggleParcelDrawer={toggleParcelDrawer}
+            toggleParcelDrawer={parcelDrawer.toggle}
           />
 
           {layoutStore && (
@@ -215,37 +160,38 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
             />
           )}
 
-          <ParcelDrawer
-            isOpen={!!parcelDrawerContent}
-            onClose={closeParcelDrawer}
-            parcelConfig={parcelDrawerContent}
-          />
-
           <SubmenuDrawer
-            isOpen={isSubmenuDrawerOpen}
-            onClose={closeSubmenuDrawer}
-            afterOpenChange={handleSubmenuDrawerAfterOpenChange}
-            submenuItems={submenuDrawerContent}
+            isOpen={submenuDrawer.isOpen}
+            onClose={submenuDrawer.close}
+            afterOpenChange={submenuDrawer.handleAfterOpenChange}
+            submenuItems={submenuDrawer.items}
             locale={locale}
             onItemClick={closeAllDrawers}
           />
 
-          <Content
-            className={`${styles.mainLayoutContent}${isFullBleed ? ` ${styles.mainLayoutContentFullBleed}` : ""}`}
-          >
+          <div className={styles.mainLayoutBody}>
             <div
-              ref={containerRef}
-              id="app-container"
-              className={styles.appContainer}
-              style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
-            ></div>
-            {shouldShowLoading && (
-              <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
-                <Spin size="large" />
-              </Flex>
-            )}
-            {shouldShowModuleError && <ModuleAccessError />}
-          </Content>
+              className={styles.pinnedDrawerSpacer}
+              style={{ width: parcelDrawer.pinnedWidth ?? 0 }}
+            />
+
+            <Content
+              className={`${styles.mainLayoutContent}${isFullBleed ? ` ${styles.mainLayoutContentFullBleed}` : ""}`}
+            >
+              <div
+                ref={containerRef}
+                id="app-container"
+                className={styles.appContainer}
+                style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
+              ></div>
+              {shouldShowLoading && (
+                <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
+                  <Spin size="large" />
+                </Flex>
+              )}
+              {shouldShowModuleError && <ModuleAccessError />}
+            </Content>
+          </div>
         </Layout>
       </Layout>
     </Layout>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const SIDER_COLLAPSED_STORAGE_KEY = "saltbox:sider-collapsed";
 
@@ -31,9 +31,9 @@ export const useSiderCollapsed = (storage: Storage | undefined = getDefaultStora
     writeSiderCollapsed(storage, isCollapsed);
   }, [storage, isCollapsed]);
 
-  const toggleCollapsed = () => {
+  const toggleCollapsed = useCallback(() => {
     setIsCollapsed((prev) => !prev);
-  };
+  }, []);
 
   return { isCollapsed, toggleCollapsed };
 };

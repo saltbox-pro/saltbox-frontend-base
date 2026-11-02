@@ -15,6 +15,14 @@ export interface MenuEntry {
   children?: MenuEntry[];
 }
 
+export interface ParcelDrawerRequest {
+  key: string;
+  title: string;
+  config: unknown;
+}
+
+export type ToggleParcelDrawer = (request: ParcelDrawerRequest) => void;
+
 export type MenuLayout = SidebarLayout;
 
 export type MenuLayoutStatus = "pending" | "retrying" | "loaded" | "failed" | "unavailable";

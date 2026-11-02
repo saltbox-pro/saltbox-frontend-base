@@ -27,6 +27,10 @@
     "save-error": "Failed to save menu settings. Please try again",
     "drag-handle": "Move \"{{label}}\" (Alt+↑/↓)"
   },
+  "parcel-drawer": {
+    "pin-button": "Pin",
+    "unpin-button": "Unpin"
+  },
   "base": {
     "not-found": "Sorry, the page you visited does not exist.",
     "back-home": "Back Home"

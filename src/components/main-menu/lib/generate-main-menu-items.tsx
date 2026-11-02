@@ -2,7 +2,7 @@ import type { MenuProps } from "antd";
 import type { ReactNode } from "react";
 
 import { resolveMenuLabel } from "../../../shared/lib/resolve-menu-label";
-import type { MenuEntry } from "../../../shared/model/menu";
+import type { MenuEntry, ToggleParcelDrawer } from "../../../shared/model/menu";
 import { renderMenuEntryLink } from "../../../shared/ui/menu-entry-link/render-menu-entry-link";
 import { type MenuIcon, MenuItemIcon } from "../../../shared/ui/menu-item-icon/menu-item-icon";
 import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
@@ -12,7 +12,7 @@ interface GenerateMainMenuItemsParams {
   locale: string;
   activeDrawerKey: string | null;
   isCollapsed: boolean;
-  toggleParcelDrawer: (content: unknown, menuKey: string) => void;
+  toggleParcelDrawer: ToggleParcelDrawer;
   toggleSubmenuDrawer: (submenu: MenuEntry[], menuKey: string) => void;
   closeAllDrawers: () => void;
 }
@@ -63,7 +63,9 @@ export const generateMainMenuItems = ({
       key: entry.key,
       icon,
       label: renderMenuEntryLink(entry, label),
-      onClick: drawer ? () => toggleParcelDrawer(drawer, entry.key) : closeAllDrawers,
+      onClick: drawer
+        ? () => toggleParcelDrawer({ key: entry.key, title: label, config: drawer })
+        : closeAllDrawers,
       className: getOverlayClassName(entry.key),
     };
   };

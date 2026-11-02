@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 
 import { getActiveMenuKeys } from "../../../shared/lib/get-active-menu-keys";
-import type { MenuEntry } from "../../../shared/model/menu";
+import type { MenuEntry, ToggleParcelDrawer } from "../../../shared/model/menu";
 import { MenuItemIcon } from "../../../shared/ui/menu-item-icon/menu-item-icon";
 import { SIDER_MENU_ITEM_OVERLAY_OPEN_CLASS } from "../../../shared/ui/sider-menu/constants";
 import { SiderMenu } from "../../../shared/ui/sider-menu/sider-menu";
@@ -22,7 +22,7 @@ interface MoreMenuItem {
 interface MainMenuProps {
   menu: MenuEntry[];
   more: MoreMenuItem | null;
-  toggleParcelDrawer: (content: unknown, menuKey: string) => void;
+  toggleParcelDrawer: ToggleParcelDrawer;
   toggleSubmenuDrawer: (submenu: MenuEntry[], menuKey: string) => void;
   closeAllDrawers: () => void;
   locale: string;
