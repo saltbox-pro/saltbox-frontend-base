@@ -19,6 +19,7 @@ interface BaseDrawerProps extends PropsWithChildren {
   width?: number;
   extra?: ReactNode;
   panelRef?: RefObject<HTMLDivElement | null>;
+  rootClassName?: string;
 }
 
 export function BaseDrawer({
@@ -32,6 +33,7 @@ export function BaseDrawer({
   width,
   extra,
   panelRef,
+  rootClassName,
   children,
 }: BaseDrawerProps) {
   const ownPanelRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,7 @@ export function BaseDrawer({
       destroyOnHidden={destroyOnHidden}
       extra={extra}
       panelRef={contentRef}
-      rootClassName={cn(styles.drawer, isPinned && styles.pinned)}
+      rootClassName={cn(styles.drawer, isPinned && styles.pinned, rootClassName)}
       styles={{
         wrapper: {
           minWidth,

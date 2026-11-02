@@ -13,6 +13,10 @@ import { MoreDrawer } from "./components/more-drawer";
 import { ParcelDrawer } from "./components/parcel-drawer";
 import { SidebarActions } from "./components/sidebar-actions";
 import { SubmenuDrawer } from "./components/submenu-drawer";
+import {
+  PINNED_PARCEL_DRAWER_MAX_WIDTH_RATIO,
+  PINNED_PARCEL_DRAWER_MIN_WIDTH,
+} from "./shared/config/parcel-drawer";
 import { SIDER_COLLAPSED_WIDTH, SIDER_WIDTH } from "./shared/config/sider";
 import { useLayoutDrawers } from "./shared/lib/use-layout-drawers";
 import { useSiderAutoCollapse } from "./shared/lib/use-sider-auto-collapse";
@@ -20,6 +24,7 @@ import { useSiderCollapsed } from "./shared/lib/use-sider-collapsed";
 import type { AppMenuStore } from "./shared/model/menu";
 import { getSidebarMenus } from "./shared/model/sidebar-menus";
 import { ModuleAccessError } from "./shared/ui/module-access-error/module-access-error";
+import { PinnedDrawerSplitter } from "./shared/ui/pinned-drawer-splitter/pinned-drawer-splitter";
 
 const { Sider, Content } = Layout;
 
@@ -132,15 +137,41 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
           </Flex>
         </Sider>
         <Layout className={styles.mainLayoutContentWrapper}>
-          <ParcelDrawer
-            isOpen={parcelDrawer.isOpen}
-            request={parcelDrawer.request}
+          <PinnedDrawerSplitter
+            className={styles.mainLayoutBody}
             pinnedWidth={parcelDrawer.pinnedWidth}
-            panelRef={parcelDrawer.panelRef}
-            onClose={parcelDrawer.close}
-            onTogglePin={parcelDrawer.togglePin}
-            afterOpenChange={parcelDrawer.handleAfterOpenChange}
-          />
+            minWidth={PINNED_PARCEL_DRAWER_MIN_WIDTH}
+            maxWidthRatio={PINNED_PARCEL_DRAWER_MAX_WIDTH_RATIO}
+            onPinnedWidthChange={parcelDrawer.resizePinned}
+            renderDrawer={(pinnedWidth) => (
+              <ParcelDrawer
+                isOpen={parcelDrawer.isOpen}
+                request={parcelDrawer.request}
+                pinnedWidth={pinnedWidth}
+                panelRef={parcelDrawer.panelRef}
+                onClose={parcelDrawer.close}
+                onTogglePin={parcelDrawer.togglePin}
+                afterOpenChange={parcelDrawer.handleAfterOpenChange}
+              />
+            )}
+          >
+            <Content
+              className={`${styles.mainLayoutContent}${isFullBleed ? ` ${styles.mainLayoutContentFullBleed}` : ""}`}
+            >
+              <div
+                ref={containerRef}
+                id="app-container"
+                className={styles.appContainer}
+                style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
+              ></div>
+              {shouldShowLoading && (
+                <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
+                  <Spin size="large" />
+                </Flex>
+              )}
+              {shouldShowModuleError && <ModuleAccessError />}
+            </Content>
+          </PinnedDrawerSplitter>
 
           <MoreDrawer
             isOpen={moreDrawer.isOpen}
@@ -168,30 +199,6 @@ export const AppLayout = observer(({ authStore, menuStore, localeStore }: AppLay
             locale={locale}
             onItemClick={closeAllDrawers}
           />
-
-          <div className={styles.mainLayoutBody}>
-            <div
-              className={styles.pinnedDrawerSpacer}
-              style={{ width: parcelDrawer.pinnedWidth ?? 0 }}
-            />
-
-            <Content
-              className={`${styles.mainLayoutContent}${isFullBleed ? ` ${styles.mainLayoutContentFullBleed}` : ""}`}
-            >
-              <div
-                ref={containerRef}
-                id="app-container"
-                className={styles.appContainer}
-                style={shouldShowLoading || shouldShowModuleError ? { display: "none" } : undefined}
-              ></div>
-              {shouldShowLoading && (
-                <Flex align="center" justify="center" style={{ width: "100%", height: "100%" }}>
-                  <Spin size="large" />
-                </Flex>
-              )}
-              {shouldShowModuleError && <ModuleAccessError />}
-            </Content>
-          </div>
         </Layout>
       </Layout>
     </Layout>

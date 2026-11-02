@@ -1,0 +1,38 @@
+.root {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.splitter:global(.ant-splitter) {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.splitter:not(.resizable) > :global(.ant-splitter-bar) {
+  display: none;
+}
+
+.splitter.resizable:global(.ant-splitter)
+  > :global(.ant-splitter-bar)
+  :global(.ant-splitter-bar-dragger) {
+  transform: translateY(-50%);
+}
+
+.splitter:global(.ant-splitter) > .spacer {
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.splitter:global(.ant-splitter) > .spacerAnimated {
+  transition: flex-basis var(--ant-motion-duration-slow, 0.3s);
+}
+
+.splitter:global(.ant-splitter) > .content {
+  flex: 1 1 0 !important;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}

@@ -1,3 +1,11 @@
 .wrapper {
   height: 100%;
 }
+
+.pinned > :global(.ant-drawer-content-wrapper) {
+  transition-property: transform, opacity !important;
+}
+
+.pinned > :global(.ant-drawer-content-wrapper) :global(.ant-drawer-content) {
+  border-right: none;
+}

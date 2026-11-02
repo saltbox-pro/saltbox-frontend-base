@@ -48,11 +48,15 @@ export const useLayoutDrawers = ({
     }
 
     const panel = parcelDrawerPanelRef.current;
-    if (!panel) return;
+    if (!isParcelDrawerOpen || !panel) return;
 
     setPinnedParcelDrawerWidth(panel.getBoundingClientRect().width);
     autoCollapseSider();
-  }, [isParcelDrawerPinned, closeParcelDrawer, autoCollapseSider]);
+  }, [isParcelDrawerPinned, isParcelDrawerOpen, closeParcelDrawer, autoCollapseSider]);
+
+  const resizePinnedParcelDrawer = useCallback((width: number) => {
+    setPinnedParcelDrawerWidth((currentWidth) => (currentWidth === null ? null : width));
+  }, []);
 
   const closeSubmenuDrawer = useCallback(() => {
     setIsSubmenuDrawerOpen(false);
@@ -141,6 +145,7 @@ export const useLayoutDrawers = ({
       panelRef: parcelDrawerPanelRef,
       toggle: toggleParcelDrawer,
       togglePin: toggleParcelDrawerPin,
+      resizePinned: resizePinnedParcelDrawer,
       close: closeParcelDrawer,
       handleAfterOpenChange: handleParcelDrawerAfterOpenChange,
     },

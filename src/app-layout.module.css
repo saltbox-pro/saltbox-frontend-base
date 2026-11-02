@@ -27,14 +27,8 @@
 }
 
 .mainLayoutBody {
-  display: flex;
   flex: 1;
   min-height: 0;
-}
-
-.pinnedDrawerSpacer {
-  flex-shrink: 0;
-  transition: width 0.2s;
 }
 
 .mainLayoutContent {

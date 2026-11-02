@@ -1,6 +1,11 @@
-import { type RefObject, useCallback, useEffect, useRef } from "react";
+import { type RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import Parcel, { type ParcelCompProps } from "single-spa-react/parcel";
 
+import {
+  PARCEL_DRAWER_MIN_WIDTH,
+  PINNED_PARCEL_DRAWER_MIN_WIDTH,
+} from "../../../shared/config/parcel-drawer";
+import { useLastOpenValue } from "../../../shared/lib/use-last-open-value";
 import type { ParcelDrawerRequest } from "../../../shared/model/menu";
 import { BaseDrawer } from "../../../shared/ui/base-drawer/base-drawer";
 import { PinToggleButton } from "../../../shared/ui/pin-toggle-button/pin-toggle-button";
@@ -38,20 +43,9 @@ export function ParcelDrawer({
     if (!isPinnedNow) closeNow();
   }, []);
 
-  return (
-    <BaseDrawer
-      isOpen={isOpen}
-      isPinned={isPinned}
-      title={request?.title}
-      onClose={onClose}
-      afterOpenChange={afterOpenChange}
-      destroyOnHidden
-      minWidth={420}
-      width={pinnedWidth ?? undefined}
-      panelRef={panelRef}
-      extra={<PinToggleButton isPinned={isPinned} onClick={onTogglePin} />}
-    >
-      {request && (
+  const parcel = useMemo(
+    () =>
+      request && (
         <Parcel
           key={request.key}
           config={request.config as ParcelCompProps["config"]}
@@ -59,7 +53,28 @@ export function ParcelDrawer({
           wrapClassName={styles.wrapper}
           onClose={handleParcelClose}
         />
-      )}
+      ),
+    [request, handleParcelClose]
+  );
+
+  const displayedPinnedWidth = useLastOpenValue(pinnedWidth, isOpen);
+  const isDisplayedPinned = displayedPinnedWidth !== null;
+
+  return (
+    <BaseDrawer
+      isOpen={isOpen}
+      isPinned={isDisplayedPinned}
+      title={request?.title}
+      onClose={onClose}
+      afterOpenChange={afterOpenChange}
+      destroyOnHidden
+      minWidth={isDisplayedPinned ? PINNED_PARCEL_DRAWER_MIN_WIDTH : PARCEL_DRAWER_MIN_WIDTH}
+      width={displayedPinnedWidth ?? undefined}
+      panelRef={panelRef}
+      rootClassName={isDisplayedPinned ? styles.pinned : undefined}
+      extra={<PinToggleButton isPinned={isDisplayedPinned} onClick={onTogglePin} />}
+    >
+      {parcel}
     </BaseDrawer>
   );
 }
